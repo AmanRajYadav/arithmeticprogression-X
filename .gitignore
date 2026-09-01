@@ -1,0 +1,27 @@
+# ── Not published ──────────────────────────────────────────────
+# This repo is public, so anything with students in it stays out.
+
+# The class recording. Real first names of real children, plus a long
+# off-topic conversation. The game was built from it; it is not shipped.
+*.docx
+~$*
+
+# NCERT chapter — someone else's copyright.
+Class 10 Chapter 5.pdf
+*.pdf
+
+# Internal Fluence material — teaching method and product roadmap.
+DESIGN-GUIDE.md
+GAME-BUILD-PLAYBOOK.md
+GAME-DESIGN-LENS.md
+MATH-ATLAS.md
+
+# the original logo filename had a space in it; fluence-logo.png is the one we ship
+fluence black logo.png
+
+# junk
+.claude/
+node_modules/
+Thumbs.db
+desktop.ini
+.DS_Store

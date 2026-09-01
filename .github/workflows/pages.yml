@@ -1,0 +1,57 @@
+name: Deploy Sidhi to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# one deploy at a time; let a running deploy finish rather than cancelling it
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # a math game with a wrong answer key is worse than no game
+      - name: Generator suite
+        run: node test-ap.js 600
+
+  build-matches-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # ap.html is generated; make sure it was rebuilt after the parts changed
+      - name: Rebuild and diff
+        run: |
+          python build.py
+          git diff --exit-code -- ap.html \
+            || (echo "::error::ap.html is stale — run 'python build.py' and commit it"; exit 1)
+
+  deploy:
+    needs: [test, build-matches-source]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,16 @@
+{
+  "name": "Sidhi — Arithmetic Progression",
+  "short_name": "Sidhi",
+  "description": "Class 10 arithmetic progressions — pattern pehchano, a aur d nikalo, koi bhi term nikalo.",
+  "start_url": "ap.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EDF1FA",
+  "theme_color": "#EDF1FA",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

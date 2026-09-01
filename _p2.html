@@ -1,0 +1,162 @@
+<body>
+
+<div id="bloom" aria-hidden="true"></div>
+<svg id="grain" aria-hidden="true"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="3"/></filter><rect width="100%" height="100%" filter="url(#gr)"/></svg>
+
+<!-- ══════════ TITLE ══════════ -->
+<section class="screen on" id="s-title">
+  <div class="brandmark"><img src="fluence-logo.png" alt=""><span>FLUENCE</span></div>
+  <h1 class="hero">SIDHI</h1>
+  <p class="hero-sub">Har step ka gap equal. Pattern pakdo — poori series tumhari.</p>
+
+  <svg id="sidhi" viewBox="0 0 300 152" aria-hidden="true">
+    <path class="st-tread st-draw" style="--L:344"
+          d="M12 126 H64 V106 H116 V86 H168 V66 H220 V46 H272"/>
+    <path class="st-rise st-draw" style="--L:22;animation-delay:.30s" d="M64 126 V106"/>
+    <path class="st-rise st-draw" style="--L:22;animation-delay:.42s" d="M116 106 V86"/>
+    <path class="st-rise st-draw" style="--L:22;animation-delay:.54s" d="M168 86 V66"/>
+    <path class="st-rise st-draw" style="--L:22;animation-delay:.66s" d="M220 66 V46"/>
+    <path class="st-first st-draw" style="--L:54;animation-delay:.16s" d="M12 126 H64"/>
+    <text class="st-lab" x="30" y="145" fill="#B84C32">a</text>
+    <text class="st-lab" x="72" y="120" fill="#007C6E">d</text>
+    <text class="st-lab" x="124" y="100" fill="#007C6E">d</text>
+    <text class="st-lab" x="176" y="80" fill="#007C6E">d</text>
+    <text class="st-lab" x="228" y="60" fill="#007C6E">d</text>
+  </svg>
+
+  <div id="titlecta" style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:300px">
+    <input class="namefield" id="nameIn" placeholder="Tumhara naam" maxlength="14" autocomplete="off" spellcheck="false" hidden>
+    <button class="btn btn-primary w100" id="startBtn">Shuru karo</button>
+    <button class="btn btn-quiet" id="titleSettings">Sound &amp; settings</button>
+  </div>
+  <p class="tiny" style="color:var(--ink-3);margin-top:14px;text-align:center">Class 10 · Chapter 5 · Arithmetic Progressions</p>
+</section>
+
+<!-- ══════════ MENU ══════════ -->
+<section class="screen" id="s-menu">
+  <div class="topbar">
+    <button class="chip" id="profChip"><span class="dotname" id="profDot">A</span><span id="profName">Student</span></button>
+    <span class="chip honey" id="streakChip" title="Daily streak">🔥 <span id="streakN">0</span></span>
+    <span class="spacer"></span>
+    <button class="iconbtn" id="recBtn" aria-label="Records"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></button>
+    <button class="iconbtn" id="setBtn" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4 13.6H4a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 5.1 6.9L5 6.8a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></button>
+  </div>
+
+  <p class="eyebrow" style="align-self:flex-start;margin-bottom:9px">Teen darwaze · ek hi sidhi</p>
+
+  <button class="doorcard glass" id="doorPat">
+    <svg class="doorart" viewBox="0 0 86 58" aria-hidden="true">
+      <path d="M6 50h18v-12h18v-12h18V14h18" fill="none" stroke="#1428A8" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 50v-12M42 38v-12M60 26V14" stroke="#00B39F" stroke-width="3.6" stroke-linecap="round"/>
+      <circle cx="15" cy="50" r="3.4" fill="#FF6A45"/>
+    </svg>
+    <span class="eyebrow">Part 01 · Exercise 5.1</span>
+    <h2>Pattern</h2>
+    <p>AP hai ya nahi? <i class="va">a</i> aur <i class="vd">d</i> kitna? Aur situation se AP banana.</p>
+    <span class="meta"><span class="pill" id="pillPatL">Seekho</span><span class="pill" id="pillPatP">Practice</span></span>
+  </button>
+
+  <button class="doorcard glass" id="doorForm">
+    <svg class="doorart" viewBox="0 0 86 58" aria-hidden="true">
+      <path d="M6 50h16v-11h16V28h16V17h16" fill="none" stroke="#1428A8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 50v-11M38 39V28M54 28V17" stroke="#00B39F" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="70" cy="17" r="5" fill="none" stroke="#FF6A45" stroke-width="3.2"/>
+      <path d="M70 8v-4" stroke="#FF6A45" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span class="eyebrow">Part 02 · Exercise 5.2</span>
+    <h2>a + (n−1)d</h2>
+    <p>Koi bhi term, koi bhi position, table bharna, missing boxes, middle term.</p>
+    <span class="meta"><span class="pill" id="pillFormL">Seekho</span><span class="pill" id="pillFormP">Practice</span></span>
+  </button>
+
+  <button class="doorcard glass" id="doorWord">
+    <svg class="doorart" viewBox="0 0 86 58" aria-hidden="true">
+      <rect x="6" y="10" width="46" height="38" rx="7" fill="none" stroke="#1428A8" stroke-width="3.2"/>
+      <path d="M15 22h28M15 30h20M15 38h24" stroke="#1428A8" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+      <path d="M60 42h6V32h6V22h6" fill="none" stroke="#00B39F" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M54 30h4" stroke="#FF6A45" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+    <span class="eyebrow">Part 03 · Exercise 5.2</span>
+    <h2>Exam sawaal</h2>
+    <p>Do term diye hain, kitne numbers hain, taxi ka kiraya — asli exam wale sawaal.</p>
+    <span class="meta"><span class="pill" id="pillWordL">Seekho</span><span class="pill" id="pillWordP">Practice</span></span>
+  </button>
+
+  <div class="grid2" style="margin-top:2px">
+    <button class="minicard glass" id="doorMixed">
+      <h3>Mixed test</h3>
+      <span class="tiny">12 sawaal, teenon parts mile hue.</span>
+    </button>
+    <button class="minicard glass" id="doorRevenge">
+      <h3>Badla mode</h3>
+      <span class="tiny">Tumhari purani galtiyan wapas.</span>
+      <span class="badge" id="revN" hidden>0</span>
+    </button>
+  </div>
+  <div class="grid2" style="margin-top:10px">
+    <button class="minicard glass" id="doorWeekly" style="grid-column:span 2">
+      <h3>Is hafte ka paper</h3>
+      <span class="tiny">Poore batch ko same 12 sawaal. Har Monday naya. <b id="weeklyMeta"></b></span>
+    </button>
+  </div>
+  <div class="grid2" style="margin-top:10px">
+    <div class="minicard glass soon" style="grid-column:span 2">
+      <span class="badge soonbadge">Jald aa raha hai</span>
+      <h3>Sum of n terms</h3>
+      <span class="tiny" id="soonFormula"></span>
+      <span class="tiny" style="margin-top:5px" id="soonNote"></span>
+    </div>
+  </div>
+  <p class="tiny" style="color:var(--ink-3);margin-top:16px;text-align:center">Har baar naye sawaal. Ek bhi question ratta nahi lagega.</p>
+</section>
+
+<!-- ══════════ HUB ══════════ -->
+<section class="screen" id="s-hub">
+  <div class="topbar">
+    <button class="iconbtn" data-back="menu" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="spacer"></span>
+  </div>
+  <p class="eyebrow" id="hubKicker" style="align-self:flex-start">Part</p>
+  <h1 class="d" style="font-size:34px;letter-spacing:-.035em;margin:4px 0;align-self:flex-start" id="hubTitle">—</h1>
+  <p style="font-size:15px;margin-bottom:18px;color:var(--ink-2);align-self:flex-start" id="hubBlurb">—</p>
+  <div id="hubList" style="width:100%"></div>
+</section>
+
+<!-- ══════════ LESSON ══════════ -->
+<section class="screen" id="s-lesson">
+  <div class="topbar">
+    <button class="iconbtn" id="lessonBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="rail" id="lessonRail" style="flex:1;margin:0"></span>
+  </div>
+  <div class="lesson glass" id="lessonCard"></div>
+  <div style="display:flex;gap:9px;margin-top:12px;width:100%">
+    <button class="btn btn-ghost" id="lessonPrev" style="flex:0 0 96px">Peeche</button>
+    <button class="btn btn-primary" id="lessonNext" style="flex:1">Aage</button>
+  </div>
+</section>
+
+<!-- ══════════ PLAY ══════════ -->
+<section class="screen" id="s-play">
+  <div class="phead">
+    <button class="iconbtn" id="playBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="hud">
+      <span class="hudnum" id="hudQ">1/10</span>
+      <span class="hudnum pts" id="hudPts">0</span>
+      <span class="hudnum" id="hudCombo" hidden style="color:var(--honey-text)"></span>
+      <span class="spacer"></span>
+      <span class="hudnum" id="hudTime" hidden style="color:var(--ink-2)">0:00</span>
+    </div>
+  </div>
+  <div class="progress"><i id="hudBar" style="width:0%"></i></div>
+  <div class="pbody" id="playBody"></div>
+  <div class="pfoot" id="playFoot"></div>
+</section>
+
+<!-- ══════════ REPORT ══════════ -->
+<section class="screen" id="s-report"><div id="reportBody" style="width:100%"></div></section>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="sheetHost"></div>
+
+<script>
+'use strict';
