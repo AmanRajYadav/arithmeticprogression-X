@@ -15,7 +15,7 @@
 const CFG = {
   appId:'sidhi',
   store:'fluence.ap.v1',
-  runLen:{ pattern:10, formula:10, word:8, mixed:12, weekly:12, revenge:10, check:3 },
+  runLen:{ pattern:10, formula:10, word:8, sum:10, case:9, mixed:12, weekly:12, revenge:10, check:3 },
   teacher:'Aman Sir',
   atoms:'AP1 AP2 AP3 AP4 AP5 AP6'          // atoms this game drills (see MATH-ATLAS)
 };
@@ -76,6 +76,12 @@ function fmt(f,style){
   const s=decStr(f);
   return s!==null?s:fracStr(f);
 }
+/* " + 5n" or " − 5n", never " + -5n" */
+function signed(x,unit){
+  unit=unit||'';
+  return (x<0?' &minus; ':' + ')+Math.abs(x)+unit;
+}
+
 /* what a student would type on the pad for this value */
 function typedForm(f,style){
   const s=fmt(f,style);

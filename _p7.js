@@ -22,8 +22,8 @@ function paintMenu(){
   const bank=(p&&p.bank)?p.bank.length:0;
   const rev=$('revN');
   rev.hidden=bank===0; rev.textContent=bank;
-  ['pattern','formula','word'].forEach(part=>{
-    const key={pattern:'Pat',formula:'Form',word:'Word'}[part];
+  ['pattern','formula','word','sum'].forEach(part=>{
+    const key={pattern:'Pat',formula:'Form',word:'Word',sum:'Sum'}[part];
     const L=$('pill'+key+'L'), P=$('pill'+key+'P');
     const total=LESSONS[part].length;
     const done=LESSONS[part].filter(l=>p&&p.lessons&&p.lessons[l.id]).length;
@@ -36,8 +36,7 @@ function paintMenu(){
   const wk=isoWeekKey(new Date());
   const w=p&&p.weekly&&p.weekly[wk];
   $('weeklyMeta').textContent=w?('Tumhara best: '+w.best+' · attempt '+w.attempts):'';
-  $('soonFormula').innerHTML=NEXT_UP.body;
-  $('soonNote').textContent=NEXT_UP.note;
+
 }
 
 /* ── hub ──────────────────────────────────────────────────── */
@@ -145,7 +144,9 @@ function paintQ(){
   $('hudCombo').textContent='×'+(G.combo+1);
   $('hudBar').style.width=Math.round(G.i/G.list.length*100)+'%';
 
-  let h='<div class="qkicker">'+esc(q.kicker||'')+'</div>';
+  let h='';
+  if(q.context)h+='<div class="qcontext">'+q.context+'</div>';
+  h+='<div class="qkicker">'+esc(q.kicker||'')+'</div>';
   if(q.lead)h+='<p class="qtext lead">'+q.lead+'</p>';
   if(q.seq){
     const cls='qseq'+((q.seq.length>34||q.seqSmall)?' long':'');
@@ -271,7 +272,7 @@ function next(){
   else paintQ();
 }
 function finishStage(){
-  if(!G.revenge && G.missed.length && G.mode!=='weekly' && G.mode!=='check'){
+  if(!G.revenge && G.missed.length && G.mode!=='weekly' && G.mode!=='check' && G.mode!=='case'){
     const list=G.missed.map(q=>{
       if(q.opts)q.opts=shuffle(q.opts);
       return q;
@@ -353,7 +354,8 @@ function endRun(){
   show('report');
 }
 
-const MODE_NAME={pattern:'Pattern',formula:'a + (n−1)d',word:'Word problems',mixed:'Mixed test',weekly:'Hafte ka paper',revenge:'Badla mode'};
+const MODE_NAME={pattern:'Pattern',formula:'a + (n−1)d',word:'Exam sawaal',sum:'Sum (Sₙ)',
+  case:'Case study',mixed:'Mixed test',weekly:'Hafte ka paper',revenge:'Badla mode'};
 function paintReport(acc,secs,total){
   const p=Store.p();
   const who=Store.d.who||'Student';
@@ -579,6 +581,8 @@ $('profChip').addEventListener('click',sheetProfile);
 $('doorPat').addEventListener('click',()=>{ Snd.tap(); openHub('pattern'); });
 $('doorForm').addEventListener('click',()=>{ Snd.tap(); openHub('formula'); });
 $('doorWord').addEventListener('click',()=>{ Snd.tap(); openHub('word'); });
+$('doorSum').addEventListener('click',()=>{ Snd.tap(); openHub('sum'); });
+$('doorCase').addEventListener('click',()=>{ Snd.tap(); startRun('case',2,{mode:'case'}); });
 $('doorMixed').addEventListener('click',()=>{ Snd.tap(); startRun('mixed',2,{mode:'mixed'}); });
 $('doorRevenge').addEventListener('click',()=>{ Snd.tap(); startRevenge(); });
 $('doorWeekly').addEventListener('click',()=>{ Snd.tap(); startWeekly(); });
@@ -612,8 +616,11 @@ globalThis.__ap={
   F,Fadd,Fsub,Fmul,Fdiv,Fscale,Fneg,Feq,Fis0,Fnum,fmt,decStr,moneyStr,fracStr,typedForm,
   term,seqStr,nOf,MINUS,
   POOLS,TOPICS,TOPIC_PART,LESSONS,PARTS,CFG,
-  genQuestion,genForTopic,buildRun,gIsAP,gFindD,gFindAD,gBuild,gNth,gFindN,gFromEnd,gMid,gSymb,
-  gSituation,gTranslate,gApply,gTwoEq,
+  genQuestion,genForTopic,buildRun,buildCaseRun,CASE_STUDIES,
+  gIsAP,gFindD,gFindAD,gBuild,gNth,gFindN,gFromEnd,gMid,gSymb,
+  gSituation,gTranslate,gApply,gTwoEq,gFigure,
+  gSumN,gSumTo,gSumTable,gSumHowMany,gSumFromTerms,gSumFormula,gSumMultiples,gSumApply,gSumSymb,
+  sumN,signed,
   mulberry32,strHash,isoWeekKey,
   setRng(f){ rng=f; }, getRng(){ return rng; },
   topicOfCheck, CHECK_TOPIC,

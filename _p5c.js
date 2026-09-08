@@ -11,9 +11,13 @@
    ════════════════════════════════════════════════════════════════ */
 
 const POOLS={
-  pattern:[gIsAP,gIsAP,gIsAP,gFindD,gFindD,gFindAD,gBuild,gBuild,gNext,gSituation,gSituation],
+  pattern:[gIsAP,gIsAP,gIsAP,gFindD,gFindD,gFindAD,gBuild,gBuild,gNext,gFigure,gFigure,
+           gSituation,gSituation],
   formula:[gNth,gNth,gNth,gFindN,gFindN,gTable,gTable,gMissing,gMissing,gFromEnd,gMid,gMid,gSymb],
-  word:[gTwoTerms,gTwoTerms,gTranslate,gApply,gApply,gExceeds,gCountAP,gCountAP,gEqualTerms,gTwoAPsDiff,gTwoEq]
+  word:[gTwoTerms,gTwoTerms,gTranslate,gApply,gApply,gExceeds,gCountAP,gCountAP,gEqualTerms,
+        gTwoAPsDiff,gTwoEq],
+  sum:[gSumN,gSumN,gSumTo,gSumTable,gSumTable,gSumHowMany,gSumFromTerms,gSumFormula,
+       gSumMultiples,gSumApply,gSumApply,gSumSymb]
 };
 
 const LESSON_TOPIC_GEN={
@@ -22,7 +26,10 @@ const LESSON_TOPIC_GEN={
   table:gTable, missing:gMissing,
   situation:gSituation, translate:gTranslate, apply:gApply, twoeq:gTwoEq,
   twoterm:gTwoTerms, exceeds:gExceeds, countap:gCountAP,
-  equalterm:gEqualTerms, twoap:gTwoAPsDiff
+  equalterm:gEqualTerms, twoap:gTwoAPsDiff, figure:gFigure,
+  sumn:gSumN, sumto:gSumTo, sumtable:gSumTable, sumhow:gSumHowMany,
+  sumterms:gSumFromTerms, sumformula:gSumFormula, summult:gSumMultiples,
+  sumapply:gSumApply, sumsymb:gSumSymb
 };
 
 /* generator keys whose reported topic differs from the key itself */
@@ -34,12 +41,16 @@ const TOPIC_PART={
   nth:'formula', findn:'formula', fromend:'formula', mid:'formula', symb:'formula',
   table:'formula', missing:'formula',
   translate:'word', apply:'word', twoeq:'word', twoterm:'word',
-  exceeds:'word', countap:'word', equalterm:'word', twoap:'word'
+  exceeds:'word', countap:'word', equalterm:'word', twoap:'word',
+  figure:'pattern',
+  sumn:'sum', sumto:'sum', sumtable:'sum', sumhow:'sum', sumterms:'sum',
+  sumformula:'sum', summult:'sum', sumapply:'sum', sumsymb:'sum',
+  casestudy:'sum'
 };
 
 function genQuestion(part,lvl){
   if(part==='mixed'||part==='weekly'){
-    const all=POOLS.pattern.concat(POOLS.formula, POOLS.word);
+    const all=POOLS.pattern.concat(POOLS.formula, POOLS.word, POOLS.sum);
     return pick(all)(lvl);
   }
   let g=pick(POOLS[part]||POOLS.pattern);
@@ -52,6 +63,7 @@ function genForTopic(topic,lvl){
 }
 /* a run of fresh questions, no two identical prompts back to back */
 function buildRun(part,lvl,count){
+  if(part==='case')return buildCaseRun(count);      /* case studies come in linked threes */
   const out=[], seen=new Set();
   let guard=0;
   while(out.length<count && guard++<count*30){

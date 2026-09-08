@@ -9,8 +9,8 @@ working offline and over WhatsApp, with no network request at all.
 import pathlib, sys
 
 HERE = pathlib.Path(__file__).parent
-PARTS = ['_p1.html', '_p2.html', '_p3.js', '_p4.js', '_p5.js', '_p5b.js', '_p5c.js',
-         '_p6.js', '_p7.js']
+PARTS = ['_p1.html', '_p2.html', '_p3.js', '_p4.js', '_p5.js', '_p5b.js', '_p5d.js',
+         '_p5e.js', '_p5c.js', '_p6.js', '_p7.js']
 OUT = HERE / 'ap.html'
 
 

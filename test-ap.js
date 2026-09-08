@@ -428,8 +428,140 @@ function checkNcert(q, tag) {
   }
 }
 
+/* ── the sum, checked by actually adding the terms up ───────── */
+/* The game uses n/2 [2a + (n−1)d]. The oracle refuses to: it adds
+   term by term with its own fractions. If the formula is ever
+   mis-transcribed, brute force will disagree with it. */
+function bruteSum(A, D, n) {
+  let acc = [0, 1];
+  for (let i = 0; i < n; i++) acc = add(acc, add(A, mulk(D, i)));
+  return acc;
+}
+
+function checkSum(q, tag) {
+  const terms = parseSeq(q.seq);
+
+  /* Ex 5.3 Q1 — sum of the first n terms */
+  if (q.topic === 'sumn' && terms && terms.length >= 3) {
+    const mm = plain(q.lead).match(/pehle (\d+) terms ka sum/);
+    if (mm) {
+      const n = +mm[1], A = terms[0], D = sub(terms[1], terms[0]);
+      ok(eq(sub(terms[2], terms[1]), D), tag + ':sumn-notap', 'not an AP: ' + q.seq);
+      const want = bruteSum(A, D, n);
+      const claim = parseTerm(q.ansLabel);
+      ok(claim && eq(claim, want), tag + ':sumn',
+         q.seq + ' n=' + n + ' -> ' + q.ansLabel + ' (brute force ' + val(want) + ')');
+    }
+  }
+
+  /* Ex 5.3 Q2 — sum right through to a given last term */
+  if (q.topic === 'sumto' && terms && terms.length >= 4) {
+    const A = terms[0], D = sub(terms[1], terms[0]), L = terms[terms.length - 1];
+    if (val(D) !== 0) {
+      const k = sub(L, A);
+      const steps = (k[0] * D[1]) / (k[1] * D[0]);
+      ok(Math.abs(steps - Math.round(steps)) < 1e-9, tag + ':sumto-n', 'last term is not on the AP: ' + q.seq);
+      const n = Math.round(steps) + 1;
+      const want = bruteSum(A, D, n);
+      const claim = parseTerm(q.ansLabel);
+      ok(claim && eq(claim, want), tag + ':sumto',
+         q.seq + ' -> ' + q.ansLabel + ' (brute force over ' + n + ' terms = ' + val(want) + ')');
+    }
+  }
+
+  /* Ex 5.3 Q4 — how many terms give this sum */
+  if (q.topic === 'sumhow' && terms && terms.length >= 3) {
+    const mm = plain(q.lead).match(/sum (−?\d+) aayega/);
+    if (mm) {
+      const target = +mm[1].replace('−', '-');
+      const A = terms[0], D = sub(terms[1], terms[0]);
+      let n = 0, acc = [0, 1], found = null;
+      while (n < 400) {
+        n++; acc = add(acc, add(A, mulk(D, n - 1)));
+        if (val(acc) === target) { found = n; break; }
+        if (val(D) > 0 && val(acc) > target) break;
+      }
+      ok(found !== null, tag + ':sumhow-none', 'no n reaches ' + target + ' for ' + q.seq);
+      if (found !== null)
+        ok(String(found) === String(q.ansLabel), tag + ':sumhow',
+           q.seq + ' sum ' + target + ' -> ' + q.ansLabel + ' (brute force ' + found + ')');
+    }
+  }
+
+  /* Ex 5.3 Q12, Q13, Q14 — sums of multiples and of the odd numbers */
+  if (q.topic === 'summult') {
+    const t = plain(q.lead);
+    let mm = t.match(/Pehle (\d+) multiples of (\d+)/);
+    if (mm) {
+      const n = +mm[1], k = +mm[2];
+      let acc = 0;
+      for (let i = 1; i <= n; i++) acc += i * k;
+      ok(String(acc) === String(q.ansLabel), tag + ':summult-first',
+         t + ' -> ' + q.ansLabel + ' (brute force ' + acc + ')');
+    }
+    mm = t.match(/0 aur (\d+) ke beech ke saare odd numbers/);
+    if (mm) {
+      const hi = +mm[1];
+      let acc = 0;
+      for (let x = 1; x < hi; x += 2) acc += x;
+      ok(String(acc) === String(q.ansLabel), tag + ':summult-odd',
+         t + ' -> ' + q.ansLabel + ' (brute force ' + acc + ')');
+    }
+  }
+
+  /* Ex 5.3 Q3 — the five-column table */
+  if (q.topic === 'sumtable') {
+    const t = plain(q.seq);
+    const mm = t.match(/a\s*=\s*(\S+).*?d\s*=\s*(\S+).*?n\s*=\s*(\S+).*?a n\s*=\s*(\S+).*?S n\s*=\s*(\S+)/);
+    if (mm) {
+      const cells = [mm[1], mm[2], mm[3], mm[4], mm[5]];
+      ok(cells.filter(c => c === '?').length === 1, tag + ':sumtable-holes', t);
+      const A = parseTerm(cells[0]), D = parseTerm(cells[1]);
+      const N = cells[2] === '?' ? null : parseInt(cells[2], 10);
+      const AN = parseTerm(cells[3]), SN = parseTerm(cells[4]);
+      const claim = parseTerm(q.ansLabel);
+      if (!claim) return;
+      if (cells[4] === '?' && A && D && N) {
+        const want = bruteSum(A, D, N);
+        ok(eq(claim, want), tag + ':sumtable-S', t + ' -> ' + q.ansLabel + ' (brute force ' + val(want) + ')');
+      } else if (cells[1] === '?' && A && N && AN) {
+        const num = sub(AN, A), want = r(num[0], num[1] * (N - 1));
+        ok(eq(claim, want), tag + ':sumtable-d', t + ' -> ' + q.ansLabel);
+      } else if (cells[0] === '?' && D && N && AN) {
+        const want = sub(AN, mulk(D, N - 1));
+        ok(eq(claim, want), tag + ':sumtable-a', t + ' -> ' + q.ansLabel);
+      } else if (cells[2] === '?' && A && D && AN) {
+        const k = sub(AN, A);
+        const steps = (k[0] * D[1]) / (k[1] * D[0]);
+        ok(String(Math.round(steps) + 1) === String(q.ansLabel), tag + ':sumtable-n', t + ' -> ' + q.ansLabel);
+      }
+    }
+  }
+
+  /* the figure patterns that really are APs */
+  if (q.topic === 'figure' && terms && terms.length >= 3) {
+    const t = plain(q.lead);
+    const D = sub(terms[1], terms[0]);
+    const isAP = eq(sub(terms[2], terms[1]), D);
+    const mm = t.match(/(\d+)(?:st|nd|rd|th) figure me kitne honge/);
+    if (mm && isAP) {
+      const n = +mm[1];
+      const want = add(terms[0], mulk(D, n - 1));
+      const claim = parseTerm(q.ansLabel);
+      ok(claim && eq(claim, want), tag + ':figure-count',
+         q.seq + ' n=' + n + ' -> ' + q.ansLabel + ' (oracle ' + val(want) + ')');
+    }
+    if (/Kya ye numbers ek AP banate hain/.test(t)) {
+      const says = /^Haan/.test(plain(q.ansLabel));
+      ok(says === isAP, tag + ':figure-isap',
+         q.seq + ' claims "' + plain(q.ansLabel) + '" but gaps are ' +
+         val(D) + ' and ' + val(sub(terms[2], terms[1])));
+    }
+  }
+}
+
 /* ── run ───────────────────────────────────────────────────── */
-const PARTS = ['pattern', 'formula', 'word', 'mixed'];
+const PARTS = ['pattern', 'formula', 'word', 'sum', 'mixed'];
 /* volume per part per level; CI passes a smaller number to keep the deploy quick */
 const PER = Number(process.argv[2]) || 3000;
 console.log('generating ' + (PARTS.length * 3 * PER).toLocaleString() + ' questions...\n');
@@ -444,6 +576,7 @@ for (const part of PARTS) {
       checkShape(q, tag);
       checkMath(q, tag);
       checkNcert(q, tag);
+      checkSum(q, tag);
     }
   }
 }
@@ -461,6 +594,7 @@ Object.keys(AP.LESSONS).forEach(part => {
         checkShape(q, 'lesson/' + L.id);
         checkMath(q, 'lesson/' + L.id);
         checkNcert(q, 'lesson/' + L.id);
+        checkSum(q, 'lesson/' + L.id);
       }
     });
     /* every lesson card must be closable HTML with no stray placeholder */
@@ -474,10 +608,12 @@ Object.keys(AP.LESSONS).forEach(part => {
 /* every named topic must actually be reachable, and every reachable topic named */
 (function topicCoverage() {
   const seen = new Set();
-  ['pattern', 'formula', 'word'].forEach(part => {
+  ['pattern', 'formula', 'word', 'sum'].forEach(part => {
     for (let lvl = 1; lvl <= 3; lvl++)
       for (let i = 0; i < 900; i++) seen.add(AP.genQuestion(part, lvl).topic);
   });
+  /* case studies are built as linked threes, never one at a time */
+  for (let i = 0; i < 200; i++) AP.buildCaseRun(9).forEach(q => seen.add(q.topic));
   Object.keys(AP.TOPICS).forEach(t =>
     ok(seen.has(t), 'topics:unreachable', t + ' is named in TOPICS but never generated'));
   seen.forEach(t =>
@@ -512,6 +648,28 @@ Object.keys(AP.LESSONS).forEach(part => {
         ok(q && q.topic === AP.topicOfCheck(k), 'lesson:checkgen',
            L.id + ' check "' + k + '" generated topic ' + (q && q.topic));
       })));
+})();
+
+/* ── case studies: one scenario, exactly three linked parts ── */
+(function caseStudies() {
+  for (let i = 0; i < 300; i++) {
+    const run = AP.buildCaseRun(9);
+    ok(run.length % 3 === 0 && run.length >= 3, 'case:len', 'run of ' + run.length + ' parts');
+    for (let j = 0; j < run.length; j += 3) {
+      const trio = run.slice(j, j + 3);
+      const ctx = trio[0].context;
+      ok(!!ctx && ctx.length > 40, 'case:context', 'missing scenario on part ' + j);
+      ok(trio.every(q => q.context === ctx), 'case:shared',
+         'the three parts do not share one scenario');
+      ok(trio[0].caseFirst === true, 'case:first', 'first part not flagged');
+      ok(trio.every(q => q.topic === 'casestudy'), 'case:topic', 'wrong topic on a case part');
+      const kickers = trio.map(q => q.kicker);
+      ok(new Set(kickers).size === 3, 'case:kickers', 'repeated part label: ' + kickers.join(' / '));
+      trio.forEach(q => { checkShape(q, 'case'); });
+      /* the scenario must not leak an answer straight into the prompt */
+      trio.forEach(q => ok(!/[Aa]nswer|<script/.test(q.context), 'case:leak', 'suspicious scenario'));
+    }
+  }
 })();
 
 /* the weekly paper must be identical for everyone, and must not leak the seed */

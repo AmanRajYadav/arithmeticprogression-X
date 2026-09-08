@@ -2,17 +2,18 @@
 
 A practice game for **Chapter 5, class 10**, built for **Fluence** from the 30–31 August class recordings and the NCERT chapter.
 
-**Scope: everything up to and including Exercise 5.2** — Section 5.1 and 5.2 with their worked examples, Exercise 5.1 in full, and Exercise 5.2 in full. The sum of *n* terms is not in the game; it sits on the menu as a locked card until it has been taught.
+**Scope: the whole chapter** — Exercises 5.1, 5.2 and 5.3 with their worked examples, plus two shapes that turn up in board papers but appear in neither the NCERT exercises nor the usual reference books: **case studies** and **figure patterns**.
 
-Three parts, one idea: an AP is a staircase where every riser is the same height.
+Four parts, one idea: an AP is a staircase where every riser is the same height.
 
 | Part | Book | What students practise |
 | --- | --- | --- |
-| **Pattern** | Exercise 5.1 | Is this an AP? What are `a` and `d`? Build the AP from `a` and `d`; write three more terms; decide whether a real situation forms an AP. |
+| **Pattern** | Exercise 5.1 | Is this an AP? What are `a` and `d`? Build the AP from `a` and `d`; write three more terms; decide whether a real situation forms an AP; read a figure pattern. |
 | **a + (n − 1)d** | Exercise 5.2 | Any term, any position, number of terms, "is this number even in the AP?", the *n*th term from the end, the `a`/`d`/`n`/`aₙ` table, missing terms in the boxes, and middle terms for odd and even `n`. |
 | **Exam sawaal** | Exercise 5.2 | Two terms given → find a third, find `d`, find which term is zero, determine the AP. "Exceeds by" questions, counting multiples, two APs meeting at the same term, two APs with the same `d`, and the full word problems. |
+| **Sum (Sₙ)** | Exercise 5.3 | The Gauss trick and where the formula comes from; `Sₙ = n/2 (a + l)`; the five-column table; how many terms give a sum (and which root to reject); `aₙ = Sₙ − Sₙ₋₁`; sums of multiples; penalties, prizes, trees, logs and the potato race. |
 
-Plus a **mixed test**, a **badla (revenge) mode** that replays your own mistakes, and **is hafte ka paper** — the same 12 questions for the whole batch, changing every Monday.
+Plus **case study** (board Section E — one scenario, three linked questions), a **mixed test**, a **badla (revenge) mode** that replays your own mistakes, and **is hafte ka paper** — the same 12 questions for the whole batch, changing every Monday.
 
 Every question is generated fresh. There is no question bank, so the drills never run out and nothing can be memorised instead of learned.
 
@@ -37,7 +38,23 @@ Every question is generated fresh. There is no question bank, so the drills neve
 | Ex 5.2 Q18 — sum of 4th and 8th | `twoeq` |
 | Ex 5.2 Q19, Q20 + Example 10 — Subba Rao, Ramkali, flower bed | `apply` |
 | Middle terms (board question, not in 5.2) | `mid` |
-| **Ex 5.3 — sum of `n` terms** | **not in the game** — locked card on the menu |
+| Ex 5.3 Q1 — sum to *n* terms | `sumn` |
+| Ex 5.3 Q2 — sum right through to a last term | `sumto` |
+| Ex 5.3 Q3 (all ten rows) — the `a`/`d`/`n`/`aₙ`/`Sₙ` table | `sumtable` |
+| Ex 5.3 Q4, Q5, Q6 — how many terms give this sum | `sumhow` |
+| Ex 5.3 Q7, Q8, Q9 — sum from one or two given terms | `sumterms` |
+| Ex 5.3 Q10, Q11 — `aₙ = 3 + 4n`, and `Sₙ = 4n − n²` | `sumformula` |
+| Ex 5.3 Q12, Q13, Q14 — sums of multiples, and of the odd numbers | `summult` |
+| Ex 5.3 Q15–Q20 — penalty, prizes, trees, logs, potato race | `sumapply` |
+
+### Two shapes the book does not have
+
+Both came out of board papers Aman shared, and neither is in NCERT or the reference books.
+
+| Board shape | In the game |
+| --- | --- |
+| **Case study** (Section E, 4 marks) — a scenario with three linked sub-questions | `casestudy` — five scenarios: the multistorey building stairs (both directions), the foldable ladder, an auditorium, and a money box |
+| **Figure patterns** from the chapter introduction — matchsticks, unit squares, dots | `figure` — including the two that famously are *not* APs (`1, 4, 9, 16` and the triangular numbers), and the "sum of the nth and (n+2)th figure is 290" question |
 
 ## Playing it
 
@@ -99,6 +116,8 @@ _p3.js                numbers (exact rationals), storage, sound, screen plumbing
 _p4.js                generators: pattern + the nth-term formula
 _p5.js                generators: situations, translation, word problems
 _p5b.js               generators: the NCERT 5.2 question shapes
+_p5d.js               generators: the sum, Exercise 5.3
+_p5e.js               generators: case studies and figure patterns
 _p5c.js               which generators sit behind which door
 _p6.js                lesson content, in the teacher's voice
 _p7.js                the round loop, feedback, report card, wiring
@@ -124,15 +143,13 @@ node test-ap.js          # ~42,000 questions
 node test-ap.js 600      # a lighter pass; this is what CI runs
 ```
 
-It pulls the script out of `ap.html`, runs it in a `vm` with a DOM stub, and generates about 42,000 questions. For every one it checks the shape (exactly four distinct options, exactly one correct, every wrong option carries a reason, no `NaN`, no float noise, no ASCII hyphen where a real minus belongs, nothing on the number pad that the pad cannot type) — and then **recomputes the answer from what the student sees, using its own fraction arithmetic**. It never asks the game to check itself.
+It pulls the script out of `ap.html`, runs it in a `vm` with a DOM stub, and generates about 57,000 questions. For every one it checks the shape (exactly four distinct options, exactly one correct, every wrong option carries a reason, no `NaN`, no float noise, no ASCII hyphen where a real minus belongs, nothing on the number pad that the pad cannot type) — and then **recomputes the answer from what the student sees, using its own fraction arithmetic**. It never asks the game to check itself.
 
-For the NCERT shapes the oracle goes further: it re-derives the missing table cell from the other three, rebuilds the AP from the two visible boxes, solves the two-term questions from scratch, and *brute-force counts* the multiples for the counting questions rather than using a formula. It also asserts that every topic named on the report card is reachable, that every generated topic is named, that the weekly paper is identical within a week and different across weeks, and that normal play is not deterministic afterwards.
+**Every sum is checked by adding the terms up one at a time.** The game uses `n/2 [2a + (n − 1)d]`; the suite refuses to, and accumulates term by term with its own fractions instead. If the formula is ever mistyped, brute force disagrees with it.
+
+For the NCERT shapes the oracle goes further: it re-derives the missing table cell from the other three, rebuilds the AP from the two visible boxes, solves the two-term questions from scratch, and *brute-force counts* the multiples for the counting questions rather than using a formula. Case studies get their own pass: every run is a whole number of threes, the three parts of each study share one scenario, the part labels do not repeat, and no scenario leaks an answer. It also asserts that every topic named on the report card is reachable, that every generated topic is named, that the weekly paper is identical within a week and different across weeks, and that normal play is not deterministic afterwards.
 
 Run it after every change to a generator. It takes a few seconds.
-
-## What comes next
-
-**The sum of n terms**, `Sₙ = n/2 [2a + (n − 1)d]` — Exercise 5.3, with the Gauss hook the teacher opened with: adding 1 to 500 in one line. The card is already on the menu; wiring it up means one more generator file, one more lesson, and adding the topics to the pools in `_p5c.js`.
 
 ---
 

@@ -119,6 +119,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .va{color:var(--sa-text);font-family:var(--font-v);font-style:italic;font-weight:600}
 .vd{color:var(--sd-text);font-family:var(--font-v);font-style:italic;font-weight:600}
 .vn{color:var(--current-dk);font-family:var(--font-v);font-style:italic;font-weight:600}
+.vs{color:var(--ink);font-family:var(--font-v);font-style:italic;font-weight:700}
 
 .brandmark{display:flex;align-items:center;gap:8px;margin-bottom:10px;opacity:.9}
 .brandmark img{width:26px;height:26px;object-fit:contain}
@@ -257,6 +258,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pfoot{width:100%;padding-top:8px}
 
 .qkicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--ink-3);text-align:center}
+.qcontext{
+  width:100%;background:rgba(255,255,255,.62);border:1px solid rgba(16,26,44,.08);
+  border-left:3px solid var(--current);border-radius:0 14px 14px 0;
+  padding:11px 13px;font-size:13.5px;line-height:1.55;color:var(--ink-2);
+  max-height:34vh;overflow-y:auto;
+}
+.qcontext b{color:var(--ink);font-weight:700}
 .qtext{font-size:15.5px;color:var(--ink-2);text-align:center;line-height:1.55;max-width:32em;margin:0 auto}
 .qtext.lead{color:var(--ink);font-weight:600}
 .qbig{font-family:var(--font-d);font-weight:800;text-align:center;font-size:clamp(30px,7vw,46px);letter-spacing:-.03em;line-height:1.1}
@@ -483,6 +491,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <span class="meta"><span class="pill" id="pillWordL">Seekho</span><span class="pill" id="pillWordP">Practice</span></span>
   </button>
 
+  <button class="doorcard glass" id="doorSum">
+    <svg class="doorart" viewBox="0 0 86 58" aria-hidden="true">
+      <rect x="8"  y="40" width="11" height="12" rx="2.5" fill="#00B39F"/>
+      <rect x="24" y="31" width="11" height="21" rx="2.5" fill="#00B39F" opacity=".78"/>
+      <rect x="40" y="22" width="11" height="30" rx="2.5" fill="#00B39F" opacity=".56"/>
+      <rect x="56" y="13" width="11" height="39" rx="2.5" fill="#00B39F" opacity=".34"/>
+      <path d="M8 52h64" stroke="#1428A8" stroke-width="3.2" stroke-linecap="round"/>
+      <circle cx="13.5" cy="34" r="3.4" fill="#FF6A45"/>
+    </svg>
+    <span class="eyebrow">Part 04 · Exercise 5.3</span>
+    <h2>Sum (S<sub>n</sub>)</h2>
+    <p>Saare terms milakar kitna? Gauss wala trick, aur uske word problems.</p>
+    <span class="meta"><span class="pill" id="pillSumL">Seekho</span><span class="pill" id="pillSumP">Practice</span></span>
+  </button>
+
   <div class="grid2" style="margin-top:2px">
     <button class="minicard glass" id="doorMixed">
       <h3>Mixed test</h3>
@@ -501,12 +524,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </button>
   </div>
   <div class="grid2" style="margin-top:10px">
-    <div class="minicard glass soon" style="grid-column:span 2">
-      <span class="badge soonbadge">Jald aa raha hai</span>
-      <h3>Sum of n terms</h3>
-      <span class="tiny" id="soonFormula"></span>
-      <span class="tiny" style="margin-top:5px" id="soonNote"></span>
-    </div>
+    <button class="minicard glass" id="doorCase" style="grid-column:span 2">
+      <h3>Case study</h3>
+      <span class="tiny">Board ka Section E — ek scenario, teen linked sawaal. 3 case studies.</span>
+    </button>
   </div>
   <p class="tiny" style="color:var(--ink-3);margin-top:16px;text-align:center">Har baar naye sawaal. Ek bhi question ratta nahi lagega.</p>
 </section>
@@ -579,7 +600,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 const CFG = {
   appId:'sidhi',
   store:'fluence.ap.v1',
-  runLen:{ pattern:10, formula:10, word:8, mixed:12, weekly:12, revenge:10, check:3 },
+  runLen:{ pattern:10, formula:10, word:8, sum:10, case:9, mixed:12, weekly:12, revenge:10, check:3 },
   teacher:'Aman Sir',
   atoms:'AP1 AP2 AP3 AP4 AP5 AP6'          // atoms this game drills (see MATH-ATLAS)
 };
@@ -640,6 +661,12 @@ function fmt(f,style){
   const s=decStr(f);
   return s!==null?s:fracStr(f);
 }
+/* " + 5n" or " − 5n", never " + -5n" */
+function signed(x,unit){
+  unit=unit||'';
+  return (x<0?' &minus; ':' + ')+Math.abs(x)+unit;
+}
+
 /* what a student would type on the pad for this value */
 function typedForm(f,style){
   const s=fmt(f,style);
@@ -903,6 +930,17 @@ const TOPICS={
   countap:'Kitne numbers hain',
   equalterm:'Do APs ka same term',
   twoap:'Do APs, same d',
+  figure:'Figure ka pattern',
+  sumn:'Sum of n terms',
+  sumto:'Sum, last term diya ho',
+  sumtable:'Sum wala table',
+  sumhow:'Kitne terms se ye sum',
+  sumterms:'Terms se sum',
+  sumformula:'Formula se sum, sum se term',
+  summult:'Multiples ka sum',
+  sumapply:'Sum ke word problems',
+  sumsymb:'Sum ka formula',
+  casestudy:'Case study',
   nth:'nth term — a + (n−1)d',
   findn:'Position aur number of terms',
   fromend:'End se nth term',
@@ -2286,6 +2324,1086 @@ function gTwoAPsDiff(lvl){
 }
 
 /* ════════════════════════════════════════════════════════════════
+   SUM OF n TERMS — Exercise 5.3.
+
+     Sₙ = n/2 [2a + (n − 1)d]        when a and d are known
+     Sₙ = n/2 (a + l)                when the last term is known
+     aₙ = Sₙ − Sₙ₋₁                  to get back from a sum to a term
+
+   Mapping to the book:
+     Ex 5.3 Q1              gSumN
+     Ex 5.3 Q2              gSumTo
+     Ex 5.3 Q3 (all ten)    gSumTable
+     Ex 5.3 Q4, Q5, Q6      gSumHowMany
+     Ex 5.3 Q7, Q8, Q9      gSumFromTerms
+     Ex 5.3 Q10, Q11        gSumFormula
+     Ex 5.3 Q12, Q13, Q14   gSumMultiples
+     Ex 5.3 Q15–Q20         gSumApply
+   ════════════════════════════════════════════════════════════════ */
+
+const VS='<i class="vs">S</i>';
+const SUMFORM=VS+'<sub>n</sub> = '+VN+'/2 [2'+VA+' + ('+VN+' &minus; 1)'+VD+']';
+const SUMFORM_L=VS+'<sub>n</sub> = '+VN+'/2 ('+VA+' + l)';
+
+/* Sₙ, exactly — no floats anywhere near it */
+function sumN(a,d,n){
+  return Fdiv(Fscale(Fadd(Fscale(a,2), Fscale(d,n-1)), n), F(2));
+}
+
+/* ── Ex 5.3 Q1 · sum of the first n terms ──────────────────── */
+function gSumN(lvl){
+  let a,d,style='auto',n;
+  if(lvl===1){ a=F(nz(1,12)); d=F(nz(2,8)); n=rnd(8,15); }
+  else if(lvl===2){ a=F(nz(-40,30)); d=F(nz(-9,9)); n=rnd(10,25); }
+  else{
+    n=pick([11,12,20,50,100]);
+    if(rng()<0.4){ a=F(rnd(-30,30),10); d=F(nz(-25,25),10); style='dec'; }
+    else{ a=F(nz(-25,25)); d=F(nz(-12,12)); n=rnd(12,40); }
+  }
+  const S=sumN(a,d,n);
+  const wrong=[
+    {v:sumN(a,d,n+1), why:'Ek term zyada add kar liya. '+VS+'<sub>'+n+'</sub> me sirf '+n+' terms hote hain.'},
+    {v:sumN(a,d,n-1), why:'Ek term chhoot gaya.'},
+    {v:term(a,d,n), why:'Ye '+n+'th term hai, sum nahi. Sum matlab saare terms add karo.'},
+    {v:Fdiv(Fscale(Fadd(Fscale(a,2), Fscale(d,n)), n), F(2)), why:'('+VN+' &minus; 1) ki jagah '+VN+' rakh diya. Gaps ek kam hote hain.'},
+    {v:Fscale(Fadd(Fscale(a,2), Fscale(d,n-1)), n), why:'2 se divide karna bhool gaye.'}
+  ];
+  const canT = lvl>=2 && canType(S,style);
+  return {
+    topic:'sumn', kicker:'Sum of n terms',
+    lead:'Is AP ke pehle '+n+' terms ka sum kya hoga?',
+    seq:seqStr(a,d,4,style),
+    mode:canT?'type':'mcq',
+    opts:canT?null:opts4([{lb:fmt(S,style),ok:true}].concat(
+      shuffle(wrong.filter(w=>!Feq(w.v,S))).map(w=>({lb:fmt(w.v,style),ok:false,why:w.why})))),
+    ansLabel:fmt(S,style), ansTyped:typedForm(S,style),
+    work:[
+      {t:VA+' = '+fmt(a,style)+',&nbsp; '+VD+' = '+fmt(d,style)+',&nbsp; '+VN+' = '+n, why:'Jo diya hai wo pehle likho.'},
+      {t:SUMFORM, why:'Sum ka formula — nth term wale se alag hai.'},
+      {t:VS+'<sub>'+n+'</sub> = '+n+'/2 [2('+fmt(a,style)+') + '+(n-1)+'('+fmt(d,style)+')]', why:'Value daal do.'},
+      {t:'= '+n+'/2 ['+fmt(Fadd(Fscale(a,2),Fscale(d,n-1)),style)+'] = '+fmt(S,style), why:'Bracket pehle solve karo, phir '+n+'/2 se multiply.'}
+    ],
+    say:'Term aur sum alag cheez hai. a<sub>n</sub> ek number deta hai, '+VS+'<sub>n</sub> saare add karke deta hai.'
+  };
+}
+
+/* ── Ex 5.3 Q2 · sum when the last term is given ───────────── */
+function gSumTo(lvl){
+  let a,d,style='auto';
+  if(lvl===1){ a=F(nz(2,12)); d=F(nz(2,7)); }
+  else if(lvl===2){ a=F(nz(-30,20)); d=F(nz(2,9)); if(rng()<0.4)d=Fneg(d); }
+  else{ a=F(nz(-20,20)); d=F(pick([3,-3,5,-5,7,-7,11,-11])); }
+  const n=rnd(8,30);
+  const l=term(a,d,n);
+  const S=sumN(a,d,n);
+  const wrong=[
+    {v:Fdiv(Fscale(Fadd(a,l),n-1),F(2)), why:VN+' ki jagah '+VN+' &minus; 1 rakh diya. Yahan poore '+n+' terms add ho rahe hain.'},
+    {v:Fdiv(Fadd(a,l),F(2)), why:VN+'/2 se multiply karna bhool gaye — ye sirf average hai.'},
+    {v:Fscale(Fadd(a,l),n), why:'2 se divide karna bhool gaye.'},
+    {v:F(n), why:'Ye number of terms hai, sum nahi.'},
+    {v:sumN(a,d,n+1), why:'Ek term zyada add kar liya.'}
+  ];
+  const canT = lvl>=2 && canType(S,style);
+  return {
+    topic:'sumto', kicker:'Sum, last term diya hai',
+    lead:'Is poori series ka sum kya hoga?',
+    seq:seqStr(a,d,3,style,{dots:true,last:fmt(l,style)}),
+    mode:canT?'type':'mcq',
+    opts:canT?null:opts4([{lb:fmt(S,style),ok:true}].concat(
+      shuffle(wrong.filter(w=>!Feq(w.v,S))).map(w=>({lb:fmt(w.v,style),ok:false,why:w.why})))),
+    ansLabel:fmt(S,style), ansTyped:typedForm(S,style),
+    work:[
+      {t:VA+' = '+fmt(a,style)+',&nbsp; '+VD+' = '+fmt(d,style)+',&nbsp; l = '+fmt(l,style), why:'Last term diya hua hai, toh pehle '+VN+' find karo.'},
+      {t:'l = '+FORMULA+' &rarr; '+fmt(l,style)+' = '+fmt(a,style)+' + ('+VN+' &minus; 1)('+fmt(d,style)+') &rarr; '+VN+' = '+n,
+       why:'Bina '+VN+' ke sum nahi nikal sakta.'},
+      {t:SUMFORM_L, why:'Jab '+VA+' aur l dono pata hon toh ye chhota formula chalta hai.'},
+      {t:VS+'<sub>'+n+'</sub> = '+n+'/2 ('+fmt(a,style)+' + '+fmt(l,style)+') = '+fmt(S,style), why:''}
+    ],
+    say:'Last term diya ho toh '+VN+'/2 ('+'a + l) sabse chhota rasta hai. Lekin '+VN+' pehle find karna padega.'
+  };
+}
+
+/* ── Ex 5.3 Q3 · the a / d / n / aₙ / Sₙ table ─────────────── */
+function gSumTable(lvl){
+  const kind=pick(['findS','findD','findA','findN']);
+  let a=nz(2,12), d=nz(2,8), n=rnd(8,16);
+  if(lvl>=2&&rng()<0.45)d=-d;
+  if(lvl>=2&&rng()<0.35)a=nz(-20,-1);
+  const an=a+(n-1)*d, S=(n*(2*a+(n-1)*d))/2;
+  if(!Number.isInteger(S))return gSumN(lvl);              /* keep the table tidy */
+
+  if(kind==='findS'){
+    const wrong=[
+      {v:(n*(2*a+n*d))/2, why:'('+VN+' &minus; 1) ki jagah '+VN+' rakh diya.'},
+      {v:an, why:'Ye '+n+'th term hai, sum nahi.'},
+      {v:((n+1)*(2*a+n*d))/2, why:'Ek term zyada add kar liya.'},
+      {v:n*(2*a+(n-1)*d), why:'2 se divide karna bhool gaye.'},
+      {v:a+an, why:'Sirf pehla aur aakhri add kiya. Beech ke sab terms reh gaye.'},
+      {v:n*a, why:'Saare terms ko '+VA+' maan liya.'},
+      {v:S-an, why:'Aakhri term ko chhod diya.'}
+    ].filter(w=>Number.isInteger(w.v));
+    const canT=lvl>=2;
+    return {
+      topic:'sumtable', kicker:'Table bharo',
+      lead:VS+'<sub>n</sub> missing hai. Wo kya hoga?',
+      seq:VA+' = '+fmt(F(a))+' &nbsp;·&nbsp; '+VD+' = '+fmt(F(d))+' &nbsp;·&nbsp; '+VN+' = '+n+
+          ' &nbsp;·&nbsp; a<sub>n</sub> = '+fmt(F(an))+' &nbsp;·&nbsp; '+VS+'<sub>n</sub> = ?',
+      seqSmall:true,
+      mode:canT?'type':'mcq',
+      opts:canT?null:opts4([{lb:fmt(F(S)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(S)), ansTyped:typedForm(F(S)),
+      work:[
+        {t:SUMFORM_L, why:VA+' aur a<sub>n</sub> dono diye hain — chhota formula lagao.'},
+        {t:VS+'<sub>'+n+'</sub> = '+n+'/2 ('+fmt(F(a))+' + '+fmt(F(an))+') = '+fmt(F(S)), why:''}
+      ],
+      say:'Jab '+VA+' aur a<sub>n</sub> dono pata hon, '+VN+'/2 (a + a<sub>n</sub>) sabse tez hai.'
+    };
+  }
+
+  if(kind==='findD'){
+    const wrong=[
+      {v:-d, why:'Sign ulta aa gaya.'},
+      {v:(an-a)/n, why:VN+' se divide kar diya. Gaps '+(n-1)+' hote hain.'},
+      {v:an-a, why:'Divide karna bhool gaye — ye poora fasla hai.'},
+      {v:a, why:'Ye pehla term hai.'},
+      {v:2*d, why:'Do gap ek saath gin liye.'},
+      {v:n, why:'Ye number of terms hai, gap nahi.'},
+      {v:an, why:'Ye aakhri term hai.'}
+    ].filter(w=>Number.isInteger(w.v));
+    return {
+      topic:'sumtable', kicker:'Table bharo',
+      lead:VD+' missing hai. Common difference kya hoga?',
+      seq:VA+' = '+fmt(F(a))+' &nbsp;·&nbsp; '+VD+' = ? &nbsp;·&nbsp; '+VN+' = '+n+
+          ' &nbsp;·&nbsp; a<sub>n</sub> = '+fmt(F(an))+' &nbsp;·&nbsp; '+VS+'<sub>n</sub> = '+fmt(F(S)),
+      seqSmall:true,
+      mode:'mcq',
+      opts:opts4([{lb:fmt(F(d)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==d)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(d)),
+      work:[
+        {t:'a<sub>n</sub> = '+FORMULA+' &rarr; '+fmt(F(an))+' = '+fmt(F(a))+' + '+(n-1)+VD, why:'Sum ki zarurat hi nahi — a<sub>n</sub> se seedha nikal jaayega.'},
+        {t:(n-1)+VD+' = '+fmt(F(an-a))+' &rarr; '+VD+' = '+fmt(F(d)), why:(n-1)+' se divide karo, '+n+' se nahi.'}
+      ],
+      say:'Table me sab kuch diya hota hai — dekho kaunsa rasta sabse chhota hai.'
+    };
+  }
+
+  if(kind==='findA'){
+    const wrong=[
+      {v:an, why:'Ye aakhri term hai, pehla nahi.'},
+      {v:an-n*d, why:'Ek gap zyada subtract kar diya.'},
+      {v:an+(n-1)*d, why:'Peeche jaana tha — add nahi, subtract karo.'},
+      {v:Math.round(S/n), why:'Ye average hai, pehla term nahi.'},
+      {v:a-d, why:'Ek gap zyada peeche chale gaye.'},
+      {v:a+d, why:'Ye doosra term hai.'},
+      {v:d, why:'Ye common difference hai, pehla term nahi.'}
+    ].filter(w=>Number.isInteger(w.v));
+    return {
+      topic:'sumtable', kicker:'Table bharo',
+      lead:VA+' missing hai. Pehla term kya hoga?',
+      seq:VA+' = ? &nbsp;·&nbsp; '+VD+' = '+fmt(F(d))+' &nbsp;·&nbsp; '+VN+' = '+n+
+          ' &nbsp;·&nbsp; a<sub>n</sub> = '+fmt(F(an))+' &nbsp;·&nbsp; '+VS+'<sub>n</sub> = '+fmt(F(S)),
+      seqSmall:true,
+      mode:'mcq',
+      opts:opts4([{lb:fmt(F(a)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==a)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(a)),
+      work:[
+        {t:'a<sub>n</sub> = '+VA+' + ('+n+' &minus; 1)'+VD+' &rarr; '+fmt(F(an))+' = '+VA+' + '+fmt(F((n-1)*d)), why:''},
+        {t:VA+' = '+fmt(F(an))+' &minus; '+fmt(F((n-1)*d))+' = '+fmt(F(a)), why:'Peeche '+(n-1)+' gaps jaana hai.'}
+      ],
+      say:'Aakhri term se peeche aana ho toh '+VD+' subtract karo.'
+    };
+  }
+
+  const wrong=[
+    {v:n-1, why:'Gaps gin liye, terms nahi. Plus one karo.'},
+    {v:n+1, why:'Ek term zyada gin liya.'},
+    {v:an, why:'Ye term ki value hai, ginti nahi.'},
+    {v:n+2, why:'Do term zyada gin liye.'},
+    {v:n-2, why:'Do term kam gin liye.'},
+    {v:2*n, why:'Double kar diya.'},
+    {v:Math.abs(d), why:'Ye common difference hai, ginti nahi.'}
+  ].filter(w=>w.v>0);
+  return {
+    topic:'sumtable', kicker:'Table bharo',
+    lead:VN+' missing hai. Kitne terms hain?',
+    seq:VA+' = '+fmt(F(a))+' &nbsp;·&nbsp; '+VD+' = '+fmt(F(d))+' &nbsp;·&nbsp; '+VN+' = ?'+
+        ' &nbsp;·&nbsp; a<sub>n</sub> = '+fmt(F(an))+' &nbsp;·&nbsp; '+VS+'<sub>n</sub> = '+fmt(F(S)),
+    seqSmall:true,
+    mode:lvl>=2?'type':'mcq',
+    opts:lvl>=2?null:opts4([{lb:String(n),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==n)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+    ansLabel:String(n), ansTyped:String(n),
+    work:[
+      {t:'a<sub>n</sub> = '+FORMULA+' &rarr; '+fmt(F(an))+' = '+fmt(F(a))+' + ('+VN+' &minus; 1)('+fmt(F(d))+')', why:'Sum ko haath mat lagao — a<sub>n</sub> se '+VN+' seedha nikal aata hai.'},
+      {t:VN+' &minus; 1 = '+(n-1)+' &rarr; '+VN+' = '+n, why:'Plus one.'}
+    ],
+    say:'Paanch cheezein hain — '+VA+', '+VD+', '+VN+', a<sub>n</sub>, '+VS+'<sub>n</sub>. Koi teen pata ho toh baaki nikal aayenge.'
+  };
+}
+
+/* ── Ex 5.3 Q4, Q5, Q6 · how many terms give this sum ──────── */
+function gSumHowMany(lvl){
+  /* d stays positive so n is unique — the two-root case gets its own
+     question in gSumApply (the 200 logs) where the rejection is the lesson */
+  const a=nz(1,15), d=nz(2,9), n=rnd(6,20);
+  const S=(n*(2*a+(n-1)*d))/2;
+  if(!Number.isInteger(S))return gSumN(lvl);
+  const wrong=[
+    {v:n+1, why:'Ek term zyada. Check karo: '+(n+1)+' terms ka sum '+((n+1)*(2*a+n*d))/2+' aata hai.'},
+    {v:n-1, why:'Ek term kam.'},
+    {v:2*n, why:'Double kar diya.'},
+    {v:a+n, why:VA+' aur '+VN+' add kar diye.'}
+  ].filter(w=>Number.isInteger(w.v)&&w.v>0);
+  const canT=lvl>=2;
+  return {
+    topic:'sumhow', kicker:'Kitne terms',
+    lead:'Is AP ke kitne terms lene par sum '+S+' aayega?',
+    seq:seqStr(F(a),F(d),4,'auto'),
+    mode:canT?'type':'mcq',
+    opts:canT?null:opts4([{lb:String(n),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==n)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+    ansLabel:String(n), ansTyped:String(n),
+    work:[
+      {t:VA+' = '+a+',&nbsp; '+VD+' = '+d+',&nbsp; '+VS+'<sub>n</sub> = '+S, why:VN+' hi unknown hai.'},
+      {t:S+' = '+VN+'/2 [2('+a+') + ('+VN+' &minus; 1)('+d+')]', why:'Sum ka formula, aur '+VN+' ko hi find karna hai.'},
+      {t:''+(2*S)+' = '+VN+'['+fmt(F(2*a-d))+signed(d,VN)+']', why:'2 udhar multiply me chala gaya, bracket khol diya.'},
+      {t:d+VN+'&sup2;'+signed(2*a-d,VN)+' &minus; '+(2*S)+' = 0 &rarr; '+VN+' = '+n,
+       why:'Quadratic ban gaya. Split the middle term — wahi chapter 4 wala kaam.'},
+      {t:VN+' hamesha positive whole number hoga', why:'Doosra root minus me aayega, use reject kar do.'}
+    ],
+    say:'Sum diya ho aur '+VN+' find karna ho toh quadratic banega. Ghabrana nahi — splitting aati hai tumhe.'
+  };
+}
+
+/* ── Ex 5.3 Q7, Q8, Q9 · sum from one or two terms ─────────── */
+function gSumFromTerms(lvl){
+  const kind=pick(['dAndLast','twoTerms']);
+  if(kind==='dAndLast'){
+    const d=nz(2,9), n=pick([22,20,25,15]), an=nz(50,180);
+    const a=an-(n-1)*d;
+    const S=(n*(a+an))/2;
+    if(!Number.isInteger(S))return gSumN(lvl);
+    const wrong=[
+      {v:n*an, why:'Saare terms ko '+an+' maan liya. Terms toh badhte hue hain.'},
+      {v:(n*(2*an+(n-1)*d))/2, why:VA+' ki jagah a<sub>n</sub> rakh diya.'},
+      {v:a+an, why:'Sirf pehla aur aakhri add kiya. Beech ke sab reh gaye.'},
+      {v:((n-1)*(a+an))/2, why:'Ek term chhoot gaya.'},
+      {v:a, why:'Ye pehla term hai, sum nahi.'},
+      {v:S+an, why:'Aakhri term do baar add ho gaya.'},
+      {v:n*a, why:'Saare terms ko '+VA+' maan liya.'}
+    ].filter(w=>Number.isInteger(w.v));
+    return {
+      topic:'sumterms', kicker:'Sum find karo',
+      lead:'Ek AP me '+VD+' = '+d+' hai aur '+ord(n)+' term '+an+' hai. Pehle '+n+' terms ka sum kya hoga?',
+      mode:lvl>=2?'type':'mcq',
+      opts:lvl>=2?null:opts4([{lb:fmt(F(S)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(S)), ansTyped:typedForm(F(S)),
+      work:[
+        {t:'a<sub>'+n+'</sub> = '+VA+' + '+(n-1)+VD+' &rarr; '+an+' = '+VA+' + '+((n-1)*d), why:'Pehle '+VA+' find karo.'},
+        {t:VA+' = '+fmt(F(a)), why:''},
+        {t:VS+'<sub>'+n+'</sub> = '+n+'/2 ('+VA+' + a<sub>'+n+'</sub>) = '+n+'/2 ('+fmt(F(a))+' + '+an+') = '+fmt(F(S)),
+         why:'Dono ends pata hain toh chhota formula.'}
+      ],
+      say:'Sum ke liye '+VA+' chahiye hi chahiye. Jo diya hai usse pehle '+VA+' nikalo.'
+    };
+  }
+  const a2=nz(4,30), d=nz(2,9), a3=a2+d;
+  const a=a2-d, n=pick([51,40,30]);
+  const S=(n*(2*a+(n-1)*d))/2;
+  if(!Number.isInteger(S))return gSumN(lvl);
+  const wrong=[
+    {v:(n*(2*a2+(n-1)*d))/2, why:'Doosre term ko pehla maan liya. '+VA+' = '+a2+' &minus; '+d+' = '+a+'.'},
+    {v:(n*(2*a+n*d))/2, why:'('+VN+' &minus; 1) ki jagah '+VN+'.'},
+    {v:a+(n-1)*d, why:'Ye '+n+'th term hai, sum nahi.'},
+    {v:n*a, why:'Saare terms ko '+VA+' maan liya.'},
+    {v:(n*(a+a+(n-1)*d))/2+d, why:'Chhota sa calculation slip.'},
+    {v:a2, why:'Ye doosra term hai, sum nahi.'},
+    {v:((n-1)*(2*a+(n-2)*d))/2, why:'Ek term chhoot gaya.'}
+  ].filter(w=>Number.isInteger(w.v));
+  return {
+    topic:'sumterms', kicker:'Sum find karo',
+    lead:'Ek AP ka doosra term '+a2+' hai aur teesra term '+a3+' hai. Pehle '+n+' terms ka sum kya hoga?',
+    mode:lvl>=2?'type':'mcq',
+    opts:lvl>=2?null:opts4([{lb:fmt(F(S)),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+    ansLabel:fmt(F(S)), ansTyped:typedForm(F(S)),
+    work:[
+      {t:VD+' = a&#8323; &minus; a&#8322; = '+a3+' &minus; '+a2+' = '+d, why:'Do lagatar terms se '+VD+' seedha mil jaata hai.'},
+      {t:VA+' = a&#8322; &minus; '+VD+' = '+a2+' &minus; '+d+' = '+fmt(F(a)), why:'Ek gap peeche jao — yahi sabse badi galti hoti hai.'},
+      {t:VS+'<sub>'+n+'</sub> = '+n+'/2 [2('+fmt(F(a))+') + '+(n-1)+'('+d+')] = '+fmt(F(S)), why:''}
+    ],
+    say:'Doosra term diya hai toh wo '+VA+' nahi hai. Ek gap peeche aana padega.'
+  };
+}
+
+/* ── Ex 5.3 Q10, Q11 · from a formula, and back again ──────── */
+function gSumFormula(lvl){
+  if(rng()<0.5){
+    /* aₙ = p + qn  →  it is an AP with d = q */
+    const q=nz(2,9)*(rng()<0.3?-1:1), p=nz(-8,12), n=pick([15,10,20]);
+    const a=p+q, an=p+q*n, S=(n*(a+an))/2;
+    if(!Number.isInteger(S))return gSumN(lvl);
+    const expr='a<sub>n</sub> = '+fmt(F(p))+' '+(q<0?'&minus;':'+')+' '+Math.abs(q)+VN;
+    const wrong=[
+      {v:(n*(2*p+(n-1)*q))/2, why:VA+' = '+fmt(F(p))+' maan liya. '+VN+' = 1 rakho: '+VA+' = '+fmt(F(a))+'.'},
+      {v:an, why:'Ye '+n+'th term hai, sum nahi.'},
+      {v:n*an, why:'Saare terms ko a<sub>'+n+'</sub> maan liya.'},
+      {v:((n+1)*(a+p+q*(n+1)))/2, why:'Ek term zyada add kar liya.'},
+      {v:a+an, why:'Sirf pehla aur aakhri add kiya.'},
+      {v:n*(a+an), why:'2 se divide karna bhool gaye.'},
+      {v:S-an, why:'Aakhri term chhoot gaya.'}
+    ].filter(w=>Number.isInteger(w.v));
+    return {
+      topic:'sumformula', kicker:'Formula se AP',
+      lead:'Ek list ka nth term '+expr+' se banta hai. Pehle '+n+' terms ka sum kya hoga?',
+      mode:lvl>=2?'type':'mcq',
+      opts:lvl>=2?null:opts4([{lb:fmt(F(S)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(S)), ansTyped:typedForm(F(S)),
+      work:[
+        {t:VN+' = 1 &rarr; '+VA+' = '+fmt(F(a))+',&nbsp; '+VN+' = 2 &rarr; a&#8322; = '+fmt(F(p+2*q)),
+         why:VN+' ki jagah 1, 2, 3 rakh ke terms banao.'},
+        {t:VD+' = a&#8322; &minus; a&#8321; = '+fmt(F(q))+' — har baar wahi, toh ye AP hai',
+         why:'a<sub>n</sub> me '+VN+' ka coefficient hi '+VD+' hota hai.'},
+        {t:'a<sub>'+n+'</sub> = '+fmt(F(p))+' '+(q<0?'&minus;':'+')+' '+Math.abs(q)+'('+n+') = '+fmt(F(an)), why:''},
+        {t:VS+'<sub>'+n+'</sub> = '+n+'/2 ('+fmt(F(a))+' + '+fmt(F(an))+') = '+fmt(F(S)), why:''}
+      ],
+      say:'a<sub>n</sub> me '+VN+' ke aage jo number hai, wahi '+VD+' hai. Ye pehchan lo toh question ek line ka hai.'
+    };
+  }
+  /* Sₙ = pn + qn²  →  aₙ = Sₙ − Sₙ₋₁ */
+  const q=nz(-4,4)||2, p=nz(2,10);
+  const k=pick([2,3,10]);
+  const Sk=p*k+q*k*k, Sk1=p*(k-1)+q*(k-1)*(k-1);
+  const ak=Sk-Sk1;
+  const expr=VS+'<sub>n</sub> = '+fmt(F(p))+VN+' '+(q<0?'&minus;':'+')+' '+Math.abs(q)+VN+'&sup2;';
+  const wrong=[
+    {v:Sk, why:'Ye pehle '+k+' terms ka sum hai, '+ord(k)+' term nahi.'},
+    {v:p*k+q*k, why:VN+'&sup2; me square lagana bhool gaye.'},
+    {v:Sk+Sk1, why:'Add kar diya. a<sub>n</sub> = '+VS+'<sub>n</sub> &minus; '+VS+'<sub>n&minus;1</sub> — subtract.'},
+    {v:Sk1, why:'Ye pehle '+(k-1)+' terms ka sum hai.'},
+    {v:p+q, why:VS+'<sub>1</sub> hai, yaani pehla term. '+ord(k)+' poochha gaya hai.'},
+    {v:Sk-Sk1+q, why:'Chhota sa calculation slip.'},
+    {v:2*ak, why:'Double ho gaya.'}
+  ];
+  return {
+    topic:'sumformula', kicker:'Sum se term',
+    lead:'Ek AP ke pehle '+VN+' terms ka sum '+expr+' hai. Iska '+ord(k)+' term kya hoga?',
+    mode:'mcq',
+    opts:opts4([{lb:fmt(F(ak)),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==ak)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+    ansLabel:fmt(F(ak)),
+    work:[
+      {t:'a<sub>n</sub> = '+VS+'<sub>n</sub> &minus; '+VS+'<sub>n&minus;1</sub>',
+       why:'nth term = pehle n ka sum, minus pehle (n&minus;1) ka sum. Beech ka sab cancel.'},
+      {t:VS+'<sub>'+k+'</sub> = '+fmt(F(p))+'('+k+') '+(q<0?'&minus;':'+')+' '+Math.abs(q)+'('+k+')&sup2; = '+fmt(F(Sk)), why:''},
+      {t:VS+'<sub>'+(k-1)+'</sub> = '+fmt(F(Sk1)), why:''},
+      {t:'a<sub>'+k+'</sub> = '+fmt(F(Sk))+' &minus; '+fmt(F(Sk1))+' = '+fmt(F(ak)), why:''}
+    ],
+    say:VS+'<sub>n</sub> diya ho toh term nikalne ka ek hi rasta hai — do sums ka fark.'
+  };
+}
+
+/* ── Ex 5.3 Q12, Q13, Q14 · sums of multiples ──────────────── */
+function gSumMultiples(lvl){
+  const kind=pick(['first','odd']);
+  if(kind==='first'){
+    const k=pick([6,8,5,7,9,4]), n=pick([15,20,40,25,30]);
+    const S=(n*(2*k+(n-1)*k))/2;
+    const wrong=[
+      {v:(n*(2*k+n*k))/2, why:'('+VN+' &minus; 1) ki jagah '+VN+'.'},
+      {v:n*k, why:'Ye '+ord(n)+' multiple hai, sum nahi.'},
+      {v:S+k, why:'Ek multiple zyada add kar liya.'},
+      {v:S/2, why:'Ek baar zyada 2 se divide kar diya.'},
+      {v:S-k, why:'Ek multiple chhoot gaya.'},
+      {v:k+n*k, why:'Sirf pehla aur aakhri add kiya.'},
+      {v:n*n*k, why:VN+' ko square kar diya.'}
+    ].filter(w=>Number.isInteger(w.v));
+    return {
+      topic:'summult', kicker:'Multiples ka sum',
+      lead:'Pehle '+n+' multiples of '+k+' ka sum kya hoga?',
+      seq:k+', '+(2*k)+', '+(3*k)+', '+DOTS,
+      mode:lvl>=2?'type':'mcq',
+      opts:lvl>=2?null:opts4([{lb:fmt(F(S)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(S)), ansTyped:typedForm(F(S)),
+      work:[
+        {t:''+k+' ke multiples: '+k+', '+(2*k)+', '+(3*k)+', '+DOTS+' &rarr; '+VA+' = '+k+', '+VD+' = '+k,
+         why:'Multiples hamesha AP hote hain, aur '+VA+' = '+VD+' = '+k+'.'},
+        {t:VS+'<sub>'+n+'</sub> = '+n+'/2 [2('+k+') + '+(n-1)+'('+k+')] = '+fmt(F(S)), why:''}
+      ],
+      say:'Multiples wale AP me '+VA+' aur '+VD+' dono wahi divisor hote hain.'
+    };
+  }
+  const hi=pick([50,60,80,100]);
+  const n=hi/2;
+  const S=n*n;                                   /* 1+3+5+…+(2n−1) = n² */
+  const wrong=[
+    {v:n*(n+1), why:'Ye 1 se '+hi+' tak ke saare numbers ka sum hai — sirf odd chahiye the.'},
+    {v:hi*hi, why:'Terms '+n+' hain, '+hi+' nahi.'},
+    {v:(n+1)*(n+1), why:'Ek term zyada gin liya. '+(hi-1)+' tak sirf '+n+' odd numbers hain.'},
+    {v:n*n-1, why:'Chhota sa calculation slip.'},
+    {v:hi, why:'Ye aakhri number ke aas paas hai, sum nahi.'},
+    {v:n*(n-1), why:'Ek term chhoot gaya.'},
+    {v:2*n*n, why:'Double ho gaya.'}
+  ];
+  return {
+    topic:'summult', kicker:'Odd numbers ka sum',
+    lead:'0 aur '+hi+' ke beech ke saare odd numbers ka sum kya hoga?',
+    seq:'1, 3, 5, '+DOTS+', '+(hi-1),
+    mode:lvl>=2?'type':'mcq',
+    opts:lvl>=2?null:opts4([{lb:String(S),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==S)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+    ansLabel:String(S), ansTyped:String(S),
+    work:[
+      {t:'Odd numbers: 1, 3, 5, '+DOTS+', '+(hi-1)+' &rarr; '+VA+' = 1, '+VD+' = 2, l = '+(hi-1), why:'Pehle AP likho.'},
+      {t:'l = '+VA+' + ('+VN+' &minus; 1)'+VD+' &rarr; '+(hi-1)+' = 1 + ('+VN+' &minus; 1)2 &rarr; '+VN+' = '+n,
+       why:'Kitne odd numbers hain, wo pehle find karo.'},
+      {t:VS+'<sub>'+n+'</sub> = '+n+'/2 (1 + '+(hi-1)+') = '+n+'/2 ('+hi+') = '+S, why:'Aur haan — pehle n odd numbers ka sum hamesha n&sup2; hota hai.'}
+    ],
+    say:'1 + 3 + 5 + … pehle n odd numbers = n&sup2;. Ye yaad rakho, MCQ me kaam aata hai.'
+  };
+}
+
+/* ── Ex 5.3 Q15–Q20 · word problems on the sum ─────────────── */
+function gSumApply(lvl){
+  const R='&#8377;';
+  const kind=pick(lvl===1?['penalty','trees']:['penalty','trees','prizes','logs','potato']);
+
+  if(kind==='penalty'){
+    const a=pick([200,150,250]), d=pick([50,40,30]), n=pick([30,25,20]);
+    const S=(n*(2*a+(n-1)*d))/2;
+    return {
+      topic:'sumapply', kicker:'Word problem',
+      lead:'Ek contract me delay ka penalty aisa hai: pehle din '+R+a+', doosre din '+R+(a+d)+', teesre din '+R+(a+2*d)+', aur har agle din '+R+d+' zyada. '+n+' din delay hone par contractor ko kitna penalty dena padega?',
+      seq:a+', '+(a+d)+', '+(a+2*d)+', '+DOTS, seqSmall:true,
+      mode:'type', ansLabel:String(S), ansTyped:String(S),
+      work:[
+        {t:'Penalty har din: '+a+', '+(a+d)+', '+(a+2*d)+', '+DOTS+' &rarr; '+VA+' = '+a+', '+VD+' = '+d, why:'Din hi terms hain.'},
+        {t:'Total penalty matlab saare dinon ka sum &rarr; '+VS+'<sub>'+n+'</sub>', why:'"How much money in total" = sum, ek din ka nahi.'},
+        {t:VS+'<sub>'+n+'</sub> = '+n+'/2 [2('+a+') + '+(n-1)+'('+d+')] = '+S, why:''}
+      ],
+      say:'"Total" ya "kitna sab milakar" dikhe toh sum ka formula. Ek din ka poochha hota toh a<sub>n</sub> lagta.'
+    };
+  }
+
+  if(kind==='trees'){
+    const cls=pick([12,10,8]), sec=pick([3,2,4]);
+    const S=sec*(cls*(cls+1))/2;
+    return {
+      topic:'sumapply', kicker:'Word problem',
+      lead:'Ek school me Class I ka har section 1 ped lagayega, Class II ka har section 2 ped, aur aise hi Class '+(cls===12?'XII':cls===10?'X':'VIII')+' tak. Har class ke '+sec+' sections hain. Kul kitne ped lagenge?',
+      seq:'1, 2, 3, '+DOTS+', '+cls, seqSmall:true,
+      mode:'type', ansLabel:String(S), ansTyped:String(S),
+      work:[
+        {t:'Ek section ke hisaab se: 1, 2, 3, '+DOTS+', '+cls+' &rarr; '+VA+' = 1, '+VD+' = 1, '+VN+' = '+cls, why:''},
+        {t:VS+'<sub>'+cls+'</sub> = '+cls+'/2 (1 + '+cls+') = '+((cls*(cls+1))/2), why:'Ek section ne itne ped lagaye.'},
+        {t:'Har class ke '+sec+' sections &rarr; '+((cls*(cls+1))/2)+' &times; '+sec+' = '+S, why:'Sum nikalne ke baad sections se multiply karna mat bhoolna.'}
+      ],
+      say:'Sum nikal liya matlab kaam khatam nahi. Question aage kya poochh raha hai, wo padho.'
+    };
+  }
+
+  if(kind==='prizes'){
+    const total=pick([700,900,600]), cnt=pick([7,6,5]), gap=pick([20,25,30]);
+    /* total = cnt/2 [2a − (cnt−1)gap] */
+    const a=(2*total/cnt+(cnt-1)*gap)/2;
+    if(!Number.isInteger(a))return gSumApply(1);
+    const wrong=[
+      {v:total/cnt, why:'Saare prizes barabar maan liye. Har prize '+gap+' kam hota ja raha hai.'},
+      {v:a-gap, why:'Ye doosra prize hai, pehla nahi.'},
+      {v:a+gap, why:'Ek prize aage nikal gaye.'},
+      {v:total-gap*(cnt-1), why:'Sum ka formula lagana tha.'}
+    ].filter(w=>Number.isInteger(w.v)&&w.v>0);
+    return {
+      topic:'sumapply', kicker:'Word problem',
+      lead:R+total+' ko '+cnt+' cash prizes me baantna hai, aur har prize apne pichle prize se '+R+gap+' kam hai. Sabse pehla (sabse bada) prize kitne ka hoga?',
+      mode:'mcq',
+      opts:opts4([{lb:fmt(F(a)),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==a)).map(w=>({lb:fmt(F(w.v)),ok:false,why:w.why})))),
+      ansLabel:fmt(F(a)),
+      work:[
+        {t:'Prizes ek AP hain, ghatti hui: '+VD+' = &minus;'+gap+', '+VN+' = '+cnt+', '+VS+'<sub>'+cnt+'</sub> = '+total, why:'"Har prize '+gap+' kam" matlab '+VD+' minus me hai.'},
+        {t:''+total+' = '+cnt+'/2 [2'+VA+' + '+(cnt-1)+'(&minus;'+gap+')]', why:'Sum ka formula, aur '+VA+' hi unknown hai.'},
+        {t:''+(2*total/cnt)+' = 2'+VA+' &minus; '+((cnt-1)*gap)+' &rarr; '+VA+' = '+fmt(F(a)), why:''},
+        {t:'Prizes: '+[0,1,2].map(i=>fmt(F(a-i*gap))).join(', ')+', '+DOTS, why:'Answer me saare prizes likhna hota hai.'}
+      ],
+      say:'"Har baar kam" dikhe toh '+VD+' minus me hai. Yahi ek line poore question ka rukh badal deti hai.'
+    };
+  }
+
+  if(kind==='logs'){
+    /* the classic two-root problem: one root has to be rejected */
+    const bottom=20, S=200, n=16, top=bottom-(n-1);
+    return {
+      topic:'sumapply', kicker:'Word problem',
+      lead:'200 logs is tarah stack kiye gaye hain: sabse neeche wali row me 20 logs, uske upar 19, uske upar 18, aur aise hi. Logs kitni rows me rakhe gaye hain?',
+      seq:'20, 19, 18, '+DOTS, seqSmall:true,
+      mode:'mcq',
+      opts:opts4([
+        {lb:'16', ok:true},
+        {lb:'25', ok:false, why:'Quadratic ke do root aate hain — 16 aur 25. Lekin 25th row me logs '+(20-24)+' aa jaate, aur logs minus me nahi ho sakte. Isliye 25 reject.'},
+        {lb:'20', ok:false, why:'Ye sabse neeche wali row ke logs hain, rows ki ginti nahi.'},
+        {lb:'10', ok:false, why:'10 rows ka sum sirf '+((10*(2*20-9))/2)+' hota hai, 200 nahi.'},
+        {lb:'41', ok:false, why:'Itni rows me toh logs khatam ho ke minus me chale jaate.'}
+      ]),
+      ansLabel:'16',
+      work:[
+        {t:VA+' = 20, '+VD+' = &minus;1, '+VS+'<sub>n</sub> = 200', why:'Har row me ek log kam.'},
+        {t:'200 = '+VN+'/2 [40 + ('+VN+' &minus; 1)(&minus;1)] = '+VN+'/2 [41 &minus; '+VN+']', why:''},
+        {t:'400 = 41'+VN+' &minus; '+VN+'&sup2; &rarr; '+VN+'&sup2; &minus; 41'+VN+' + 400 = 0', why:'Quadratic ban gaya.'},
+        {t:'('+VN+' &minus; 16)('+VN+' &minus; 25) = 0 &rarr; '+VN+' = 16 ya 25', why:'Do root aaye — dono check karne padenge.'},
+        {t:VN+' = 25 &rarr; a<sub>25</sub> = 20 + 24(&minus;1) = &minus;4 &rarr; reject', why:'Logs minus me nahi ho sakte. Isliye '+VN+' = 16, aur top row me '+top+' logs.'}
+      ],
+      say:'Do root aayein toh dono check karo. Jo physically possible nahi, use reject karna hi asli answer hai.'
+    };
+  }
+
+  const first=pick([5,4,6]), gap=pick([3,4,2]), cnt=pick([10,8,12]);
+  /* 2×5 + 2×(5+3) + … = 2 × sum of distances */
+  const S=2*((cnt*(2*first+(cnt-1)*gap))/2);
+  return {
+    topic:'sumapply', kicker:'Word problem',
+    lead:'Ek potato race me bucket starting point par hai. Pehla potato bucket se '+first+' m door hai, aur baaki potatoes ek line me '+gap+' m ke gap par rakhe hain. Total '+cnt+' potatoes hain. Competitor bucket se daudta hai, ek potato uthata hai, wapas aake bucket me daalta hai, phir agla — aise hi sab tak. Wo kul kitne metre daudegi?',
+    mode:'type', ansLabel:String(S), ansTyped:String(S),
+    work:[
+      {t:'Pehle potato ke liye: '+first+' m jaana + '+first+' m aana = 2 &times; '+first,
+       why:'Har potato ke liye jaana aur aana — dono.'},
+      {t:'Doosre ke liye: 2 &times; '+(first+gap)+',&nbsp; teesre ke liye: 2 &times; '+(first+2*gap), why:''},
+      {t:'Distances ka AP: '+first+', '+(first+gap)+', '+(first+2*gap)+', '+DOTS+' &rarr; '+VA+' = '+first+', '+VD+' = '+gap+', '+VN+' = '+cnt, why:''},
+      {t:VS+'<sub>'+cnt+'</sub> = '+cnt+'/2 [2('+first+') + '+(cnt-1)+'('+gap+')] = '+(S/2), why:'Ye sirf ek taraf ka total hai.'},
+      {t:'Aana-jaana dono &rarr; 2 &times; '+(S/2)+' = '+S+' m', why:'Do se multiply karna sabse zyada log yahin bhoolte hain.'}
+    ],
+    say:'Jaana aur aana dono gina. Sum nikalne ke baad 2 se multiply — wahi ek step marks kha jaata hai.'
+  };
+}
+
+/* ── formula recall for the sum ────────────────────────────── */
+function gSumSymb(lvl){
+  const kind=pick(['main','withL','fromS','vsTerm']);
+  if(kind==='main'){
+    return {topic:'sumsymb',kicker:'Formula',lead:'Pehle '+VN+' terms ke sum ka formula kya hai?',
+      mode:'mcq',ansLabel:'Sn = n/2 [2a + (n − 1)d]',
+      opts:opts4([
+        {lb:SUMFORM, ok:true},
+        {lb:VS+'<sub>n</sub> = '+VN+'/2 ['+VA+' + ('+VN+' &minus; 1)'+VD+']', ok:false, why:VA+' ka double hota hai — 2'+VA+'.'},
+        {lb:VS+'<sub>n</sub> = '+VA+' + ('+VN+' &minus; 1)'+VD, ok:false, why:'Ye a<sub>n</sub> ka formula hai, sum ka nahi.'},
+        {lb:VS+'<sub>n</sub> = '+VN+'/2 [2'+VA+' + '+VN+VD+']', ok:false, why:'Gaps '+VN+' &minus; 1 hote hain.'}
+      ]),
+      work:[{t:'S = a + (a+d) + '+DOTS+' + [a + (n&minus;1)d]', why:'Seedha likho.'},
+            {t:'Ulta likh ke add karo &rarr; 2S = n[2a + (n&minus;1)d]', why:'Gauss wala trick — dono ends jodo, har jodi barabar aati hai.'},
+            {t:SUMFORM, why:'2 se divide.'}],
+      say:'Ye wahi Gauss wala tarika hai — 1 se 100 tak jodne ka.'};
+  }
+  if(kind==='withL'){
+    return {topic:'sumsymb',kicker:'Formula',lead:'Jab pehla term '+VA+' aur aakhri term l diya ho, sum ka formula kya hai?',
+      mode:'mcq',ansLabel:'Sn = n/2 (a + l)',
+      opts:opts4([
+        {lb:SUMFORM_L, ok:true},
+        {lb:VS+'<sub>n</sub> = ('+VA+' + l)/2', ok:false, why:VN+'/2 se multiply karna hai — ye sirf average hai.'},
+        {lb:VS+'<sub>n</sub> = '+VN+'('+VA+' + l)', ok:false, why:'2 se divide karna bhool gaye.'},
+        {lb:VS+'<sub>n</sub> = '+VN+'/2 (l &minus; '+VA+')', ok:false, why:'Add karna hai, subtract nahi.'}
+      ]),
+      work:[{t:SUMFORM, why:'Bade wale formula se shuru karo.'},
+            {t:VN+'/2 [a + (a + (n&minus;1)d)] = '+VN+'/2 [a + a<sub>n</sub>]', why:'2a ko a + a likh do.'},
+            {t:'aur a<sub>n</sub> = l &rarr; '+SUMFORM_L, why:'Isiliye ye alag formula nahi hai, wahi hai.'}],
+      say:VD+' na diya ho aur l diya ho toh yahi lagana hai.'};
+  }
+  if(kind==='fromS'){
+    return {topic:'sumsymb',kicker:'Formula',lead:VS+'<sub>n</sub> pata ho toh a<sub>n</sub> kaise nikalte hain?',
+      mode:'mcq',ansLabel:'an = Sn − Sn−1',
+      opts:opts4([
+        {lb:'a<sub>n</sub> = '+VS+'<sub>n</sub> &minus; '+VS+'<sub>n&minus;1</sub>', ok:true},
+        {lb:'a<sub>n</sub> = '+VS+'<sub>n</sub> &divide; '+VN, ok:false, why:'Ye average hai, nth term nahi.'},
+        {lb:'a<sub>n</sub> = '+VS+'<sub>n</sub> + '+VS+'<sub>n&minus;1</sub>', ok:false, why:'Subtract karna hai — nahi toh terms do baar aa jaayenge.'},
+        {lb:'a<sub>n</sub> = '+VS+'<sub>n&minus;1</sub> &minus; '+VS+'<sub>n</sub>', ok:false, why:'Sign ulta.'}
+      ]),
+      work:[{t:VS+'<sub>n</sub> = a&#8321; + a&#8322; + '+DOTS+' + a<sub>n&minus;1</sub> + a<sub>n</sub>', why:''},
+            {t:VS+'<sub>n&minus;1</sub> = a&#8321; + a&#8322; + '+DOTS+' + a<sub>n&minus;1</sub>', why:''},
+            {t:'Subtract karo &rarr; sirf a<sub>n</sub> bachta hai', why:'Baaki sab cancel ho jaata hai.'}],
+      say:'Sum me se ek kam ka sum ghata do — jo bacha wahi nth term.'};
+  }
+  const n=pick([12,20,15]);
+  return {topic:'sumsymb',kicker:'Term ya sum?',
+    lead:'"'+ord(n)+' term kya hai" aur "pehle '+n+' terms ka sum kya hai" — inme kya farak hai?',
+    mode:'mcq',ansLabel:'Pehla ek number hai, doosra sab add karke',
+    opts:opts4([
+      {lb:'Pehla sirf ek term deta hai, doosra saare '+n+' terms add karke', ok:true},
+      {lb:'Dono ek hi cheez hain', ok:false, why:'Bilkul alag. a<sub>'+n+'</sub> ek term hai, '+VS+'<sub>'+n+'</sub> '+n+' terms ka total.'},
+      {lb:'Pehla sum hai, doosra term', ok:false, why:'Ulta ho gaya.'},
+      {lb:'Dono ke liye ek hi formula lagta hai', ok:false, why:'a<sub>n</sub> = '+VA+' + ('+VN+'&minus;1)'+VD+' aur '+SUMFORM+' — do alag formule.'}
+    ]),
+    work:[{t:'a<sub>'+n+'</sub> = '+FORMULA+' &rarr; ek number', why:'Sirf '+ord(n)+' waala term.'},
+          {t:VS+'<sub>'+n+'</sub> = '+SUMFORM+' &rarr; pehle '+n+' terms ka total', why:'Saare add ho gaye.'}],
+    say:'Question me "total", "sum", "kul milakar" dikhe toh '+VS+'<sub>n</sub>. Warna a<sub>n</sub>.'};
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BOARD-ONLY SHAPES
+
+   Two things that turn up in board papers but are in neither the
+   NCERT exercises nor the usual reference books:
+
+   1. CASE STUDIES (Section E, 4 marks). One scenario, three linked
+      sub-questions, usually (i) is it an AP, (ii) an nth term or a
+      sum, (iii) a harder sum with an internal choice. Built from the
+      papers Aman shared: the multistorey building stairs and the
+      foldable ladder.
+
+   2. FIGURE PATTERNS from the chapter introduction — matchsticks,
+      unit squares, dots. Some of these form an AP and some famously
+      do not, which is exactly what makes them worth asking.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── figure patterns ───────────────────────────────────────── */
+const FIG_FAMILIES=[
+  { id:'sqrow', ap:true,
+    txt:n=>'Matchsticks se ek line me squares banaye ja rahe hain. Ek square ke liye 4 matchstick, do ke liye 7, teen ke liye 10 — har naye square ke liye 3 aur.',
+    seq:[4,7,10,13], a:4, d:3,
+    note:'Pehle square ko 4 chahiye, uske baad har square sirf 3 maangta hai — ek side share ho jaati hai.' },
+  { id:'trirow', ap:true,
+    txt:n=>'Matchsticks se ek line me triangles banaye ja rahe hain. Ek triangle ke liye 3 matchstick, do ke liye 5, teen ke liye 7.',
+    seq:[3,5,7,9], a:3, d:2,
+    note:'Har naya triangle ek side share karta hai, isliye sirf 2 aur lagte hain.' },
+  { id:'perim', ap:true,
+    txt:n=>'Unit squares se badhte hue square banaye ja rahe hain — Fig (i) 1×1, Fig (ii) 2×2, Fig (iii) 3×3. Har figure ka perimeter dekho.',
+    seq:[4,8,12,16], a:4, d:4,
+    note:'Side 1, 2, 3 badh rahi hai toh perimeter 4, 8, 12 — har baar 4 zyada.' },
+  { id:'dots', ap:true,
+    txt:n=>'Har figure me dots ki ek extra row jud rahi hai. Fig (i) me 2 dots, Fig (ii) me 5, Fig (iii) me 8.',
+    seq:[2,5,8,11], a:2, d:3,
+    note:'Har figure me 3 dots aur jud rahe hain.' },
+  { id:'unitsq', ap:false,
+    txt:n=>'Har figure ek square hai jo unit squares se bana hai — Fig (i) 1×1, Fig (ii) 2×2, Fig (iii) 3×3. Har figure me kitne unit squares hain, wo dekho.',
+    seq:[1,4,9,16], f:n=>n*n,
+    note:'1, 4, 9, 16 — gaps 3, 5, 7. Har baar gap khud badh raha hai, isliye ye AP nahi hai.' },
+  { id:'tri', ap:false,
+    txt:n=>'Har figure me ek row aur jud rahi hai: Fig (i) me 1 circle, Fig (ii) me 1 + 2 = 3, Fig (iii) me 1 + 2 + 3 = 6.',
+    seq:[1,3,6,10], f:n=>n*(n+1)/2,
+    note:'Gaps 2, 3, 4 — badhte ja rahe hain. Ye triangular numbers hain, AP nahi.' }
+];
+
+function gFigure(lvl){
+  const fam=pick(FIG_FAMILIES);
+  const kind = fam.ap ? pick(lvl===1?['isap','count']:['isap','count','count','which'])
+                      : pick(lvl>=3?['isap','sumTwo']:['isap','isap','count']);
+  const shown=fam.seq.slice(0,3).join(', ')+', '+DOTS;
+  const val=n=>fam.ap ? fam.a+(n-1)*fam.d : fam.f(n);
+
+  if(kind==='isap'){
+    const g1=fam.seq[1]-fam.seq[0], g2=fam.seq[2]-fam.seq[1];
+    const list=[
+      {lb:'Haan — AP hai, '+VD+' = '+g1, ok:!!fam.ap,
+       why:fam.ap?'':'Pehla gap dekh ke haan bol diya. Doosra gap '+g2+' hai — equal nahi.'},
+      {lb:'Haan — AP hai, '+VD+' = '+MINUS+g1, ok:false, why:'Sign ulta. Numbers badh rahe hain.'},
+      {lb:'Nahi — gap khud badhta ja raha hai', ok:!fam.ap,
+       why:fam.ap?'Gaps toh equal hain — '+g1+' aur '+g2+'. Nikal ke dekho.':''},
+      {lb:'Nahi — har baar multiply ho raha hai, add nahi', ok:false, why:'Reason theek nahi hai.'}
+    ];
+    return {
+      topic:'figure', kicker:'Figure pattern',
+      lead:fam.txt()+' Kya ye numbers ek AP banate hain?',
+      seq:shown, seqSmall:true,
+      mode:'mcq', opts:opts4(list),
+      ansLabel:fam.ap?('Haan — AP hai, d = '+g1):'Nahi — gap khud badhta ja raha hai',
+      work:[
+        {t:'Figures ke numbers: '+fam.seq.join(', ')+', '+DOTS, why:'Pehle figure ko numbers me badlo.'},
+        {t:'a&#8322; &minus; a&#8321; = '+g1+',&nbsp; a&#8323; &minus; a&#8322; = '+g2, why:'Do gaps compare karo.'},
+        {t:fam.ap?('Dono '+g1+' — ye AP hai'):'Gaps equal nahi — ye AP nahi hai', why:fam.note}
+      ],
+      say:'Figure dekh ke andaza mat lagao. Numbers likho, gaps find karo, phir bolo.'
+    };
+  }
+
+  if(kind==='count'){
+    const n=rnd(8,30);
+    const ans=val(n);
+    const wrong = fam.ap ? [
+      {v:fam.a+n*fam.d, why:ord(n)+' figure me gaps '+(n-1)+' hote hain, '+n+' nahi.'},
+      {v:fam.d*n, why:'Pehli figure wala hissa add karna bhool gaye.'},
+      {v:fam.a+(n-2)*fam.d, why:'Ek gap kam le liya.'},
+      {v:n, why:'Ye figure number hai, ginti nahi.'}
+    ] : [
+      {v:val(n+1), why:'Ek figure aage nikal gaye.'},
+      {v:val(n-1), why:'Ek figure peeche reh gaye.'},
+      {v:fam.seq[0]+(n-1)*(fam.seq[1]-fam.seq[0]), why:'AP maan ke chal diye — lekin yahan gap barabar nahi hai.'},
+      {v:n, why:'Ye figure number hai, ginti nahi.'}
+    ];
+    return {
+      topic:'figure', kicker:'Figure pattern',
+      lead:fam.txt()+' '+ord(n)+' figure me kitne honge?',
+      seq:shown, seqSmall:true,
+      mode:lvl>=2?'type':'mcq',
+      opts:lvl>=2?null:opts4([{lb:String(ans),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==ans&&w.v>0)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+      ansLabel:String(ans), ansTyped:String(ans),
+      work: fam.ap ? [
+        {t:'Numbers: '+fam.seq.join(', ')+', '+DOTS+' &rarr; '+VA+' = '+fam.a+', '+VD+' = '+fam.d, why:'Ye AP hai, toh formula chalega.'},
+        {t:'a<sub>'+n+'</sub> = '+fam.a+' + ('+n+' &minus; 1)('+fam.d+') = '+ans, why:'Wahi n &minus; 1.'}
+      ] : [
+        {t:'Numbers: '+fam.seq.join(', ')+', '+DOTS+' — gaps '+(fam.seq[1]-fam.seq[0])+', '+(fam.seq[2]-fam.seq[1])+', barabar nahi', why:'Ye AP nahi hai, toh AP ka formula nahi lagega.'},
+        {t:fam.id==='unitsq'?('Har figure n&times;n hai &rarr; nth figure me n&sup2; unit squares')
+                            :('nth figure me 1 + 2 + '+DOTS+' + n = n(n+1)/2'), why:'Pattern ko seedha samjho.'},
+        {t:''+n+' rakho &rarr; '+ans, why:''}
+      ],
+      say:fam.ap?'AP hai toh a + (n−1)d lagao. Bas pehle confirm karo ki AP hai.'
+                :'AP nahi hai toh AP ka formula lagana galat hoga. Pattern khud samajhna padega.'
+    };
+  }
+
+  if(kind==='which'){
+    const n=rnd(9,28), target=val(n);
+    const wrong=[
+      {v:n-1, why:'Gaps gin liye, figure number nahi. Plus one karo.'},
+      {v:n+1, why:'Ek figure aage nikal gaye.'},
+      {v:target, why:'Ye ginti hai, figure number nahi.'},
+      {v:n+2, why:'Do figure aage nikal gaye.'}
+    ].filter(w=>w.v>0);
+    return {
+      topic:'figure', kicker:'Figure pattern',
+      lead:fam.txt()+' Kaunsi figure me '+target+' honge?',
+      seq:shown, seqSmall:true,
+      mode:lvl>=2?'type':'mcq',
+      opts:lvl>=2?null:opts4([{lb:String(n),ok:true}].concat(
+        shuffle(wrong.filter(w=>w.v!==n)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+      ansLabel:String(n), ansTyped:String(n),
+      work:[
+        {t:VA+' = '+fam.a+', '+VD+' = '+fam.d+', a<sub>n</sub> = '+target, why:''},
+        {t:''+target+' = '+fam.a+' + ('+VN+' &minus; 1)('+fam.d+')', why:'Formula ulta chalao.'},
+        {t:VN+' &minus; 1 = '+(n-1)+' &rarr; '+VN+' = '+n, why:'Plus one karna mat bhoolna.'}
+      ],
+      say:'Ginti di hai, figure number poochha hai. Ye ulta sawaal hai.'
+    };
+  }
+
+  /* the board question: nth and (n+2)th figure together */
+  const n=rnd(5,14);
+  const gap=2;
+  const total=val(n)+val(n+gap);
+  const wrong=[
+    {v:n+gap, why:'Ye doosri figure ka number hai. Pehli wali poochhi gayi hai.'},
+    {v:n+1, why:'Ek figure aage nikal gaye.'},
+    {v:n-1, why:'Ek figure peeche reh gaye.'},
+    {v:val(n), why:'Ye nth figure ke unit squares hain, '+VN+' nahi.'}
+  ].filter(w=>w.v>0);
+  const isSq=fam.id==='unitsq';
+  return {
+    topic:'figure', kicker:'Figure pattern',
+    lead:fam.txt()+' Agar '+VN+'th figure aur ('+VN+' + '+gap+')th figure ke total mila kar '+total+' hain, toh '+VN+' kya hai?',
+    seq:shown, seqSmall:true,
+    mode:'mcq',
+    opts:opts4([{lb:String(n),ok:true}].concat(
+      shuffle(wrong.filter(w=>w.v!==n)).map(w=>({lb:String(w.v),ok:false,why:w.why})))),
+    ansLabel:String(n),
+    work:[
+      {t:'nth figure me '+(isSq?'n&sup2;':'n(n+1)/2')+', aur (n + '+gap+')th figure me '+(isSq?'(n + '+gap+')&sup2;':'(n+'+gap+')(n+'+(gap+1)+')/2'),
+       why:'Pattern ko formula me likho.'},
+      {t:(isSq?('n&sup2; + (n + '+gap+')&sup2; = '+total):('n(n+1)/2 + (n+'+gap+')(n+'+(gap+1)+')/2 = '+total)),
+       why:'"Sum ... is '+total+'" matlab dono add karke equal to.'},
+      {t:(isSq?('2n&sup2; + '+(2*gap)+'n + '+(gap*gap)+' &minus; '+total+' = 0'):'Simplify karke quadratic banao'),
+       why:'Quadratic ban gaya — chapter 4 wala splitting lagega.'},
+      {t:VN+' = '+n+'&nbsp; (doosra root minus me aata hai, reject)', why:'Figure number minus me nahi ho sakta.'}
+    ],
+    say:'Ye board me aaya tha aur NCERT me hai hi nahi. Pattern ko formula banao, phir quadratic solve karo.'
+  };
+}
+
+/* ── case studies ──────────────────────────────────────────── */
+/* each returns {context, parts:[q, q, q]} — the parts share one scenario */
+
+function csStairs(){
+  const a=pick([10,12,8,14]);
+  let d=pick([14,16,18,22]); if(d===a)d=a+6;
+  const floors=pick([11,10,12]);
+  const S=(floors*(2*a+(floors-1)*d))/2;
+  const upto=pick([5,6,7]);
+  const Sup=(upto*(2*a+(upto-1)*d))/2;
+  const both=2*Sup;
+  const seq=[a,a+d,a+2*d].map(String).join(', ')+', '+DOTS;
+  const context=
+    '<b>Multistorey building</b> — stilt parking ke saath ek building bani hai, jisme lift aur staircase dono hain. '+
+    'Ground floor se first floor tak <b>'+a+'</b> stairs hain, first se second tak <b>'+(a+d)+'</b>, '+
+    'second se third tak <b>'+(a+2*d)+'</b>, aur aise hi aage.';
+  return {context:context, parts:[
+    {
+      topic:'casestudy', kicker:'Case study · (i)',
+      lead:'Kya '+seq+' ek AP banate hain? Justify karo.',
+      mode:'mcq', ansLabel:'Haan — d = '+d,
+      opts:opts4([
+        {lb:'Haan — AP hai, '+VD+' = '+d, ok:true},
+        {lb:'Haan — AP hai, '+VD+' = '+a, ok:false, why:'Ye pehla term hai, gap nahi.'},
+        {lb:'Nahi — gaps equal nahi hain', ok:false, why:'Nikal ke dekho: '+(a+d)+' &minus; '+a+' = '+d+', aur '+(a+2*d)+' &minus; '+(a+d)+' = '+d+'. Dono equal.'},
+        {lb:'Haan — AP hai, '+VD+' = '+MINUS+d, ok:false, why:'Sign ulta. Stairs badh rahi hain.'},
+        {lb:'Haan — AP hai, '+VD+' = '+(2*d), ok:false, why:'Ye do gap ek saath hain.'},
+        {lb:'Nahi — har baar multiply ho raha hai', ok:false, why:'Add ho raha hai, multiply nahi — '+a+' me '+d+' add karke '+(a+d)+'.'}
+      ]),
+      work:[
+        {t:'a&#8322; &minus; a&#8321; = '+(a+d)+' &minus; '+a+' = '+d, why:''},
+        {t:'a&#8323; &minus; a&#8322; = '+(a+2*d)+' &minus; '+(a+d)+' = '+d, why:''},
+        {t:'Dono equal &rarr; yes, this forms an AP with '+VD+' = '+d, why:'Exam me reason bhi likhna hota hai.'}
+      ],
+      say:'Case study ka pehla part hamesha aasan hota hai — poore 1 mark ke liye bas gaps check karo.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (ii)',
+      lead:'Ground floor se '+ord(floors)+' floor tak kul kitni stairs hain?',
+      seq:seq, seqSmall:true,
+      mode:'type', ansLabel:String(S), ansTyped:String(S),
+      work:[
+        {t:VA+' = '+a+', '+VD+' = '+d+', '+VN+' = '+floors, why:'Har floor ek term hai.'},
+        {t:'"Kul kitni stairs" matlab sum &rarr; '+VS+'<sub>'+floors+'</sub>', why:'Ek floor ki nahi, sabki milakar.'},
+        {t:VS+'<sub>'+floors+'</sub> = '+floors+'/2 [2('+a+') + '+(floors-1)+'('+d+')] = '+S, why:''}
+      ],
+      say:'"Total" dikha toh sum. Yahi ek shabd term aur sum me farak karta hai.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (iii)',
+      lead:'Ek aadmi har floor par ek-ek karke paani ka can pahunchata hai — ground se first floor jaata hai, wapas aata hai, phir second floor, phir wapas, aur aise hi. '+ord(upto)+' floor tak can pahunchane me wo kul kitni stairs chadha aur utra?',
+      seq:seq, seqSmall:true,
+      mode:'type', ansLabel:String(both), ansTyped:String(both),
+      work:[
+        {t:'Ek taraf ki stairs: '+VS+'<sub>'+upto+'</sub> = '+upto+'/2 [2('+a+') + '+(upto-1)+'('+d+')] = '+Sup,
+         why:''+upto+' floor tak chadhne me itni stairs.'},
+        {t:'Har baar wapas bhi aana hai &rarr; 2 &times; '+Sup+' = '+both, why:'Chadha aur utra — dono gino.'}
+      ],
+      say:'Sum nikal liya, ab 2 se multiply. Wahi ek step jahan sabke marks jaate hain.'
+    }
+  ]};
+}
+
+function csStairsBack(){
+  const a=pick([10,12,15]);
+  let d=pick([14,16,20]); if(d===a)d=a+5;
+  const n=pick([5,6,4]);
+  const total=2*((n*(2*a+(n-1)*d))/2);
+  const context=
+    '<b>Multistorey building</b> — ground floor se first floor tak <b>'+a+'</b> stairs hain, '+
+    'first se second tak <b>'+(a+d)+'</b>, second se third tak <b>'+(a+2*d)+'</b>, aur aise hi aage. '+
+    'Ek aadmi har floor par ek-ek can pahunchata hai — har baar upar jaata hai aur wapas neeche aata hai.';
+  return {context:context, parts:[
+    {
+      topic:'casestudy', kicker:'Case study · (i)',
+      lead:'Stairs ka common difference kya hai?',
+      seq:[a,a+d,a+2*d].map(String).join(', ')+', '+DOTS, seqSmall:true,
+      mode:'mcq', ansLabel:String(d),
+      opts:opts4([
+        {lb:String(d), ok:true},
+        {lb:String(a), ok:false, why:'Ye pehla term hai.'},
+        {lb:String(2*d), ok:false, why:'Ye do gap ek saath hain.'},
+        {lb:MINUS+d, ok:false, why:'Sign ulta — stairs badh rahi hain.'},
+        {lb:String(a+d), ok:false, why:'Ye doosra term hai, gap nahi.'},
+        {lb:String(a+2*d), ok:false, why:'Ye teesra term hai.'}
+      ]),
+      work:[{t:VD+' = '+(a+d)+' &minus; '+a+' = '+d, why:'Baad wale me se pehla subtract karo.'},
+            {t:'Check: '+(a+2*d)+' &minus; '+(a+d)+' = '+d, why:'Equal aaya — AP confirm.'}],
+      say:'Har case study ka pehla part yahi hota hai. Free ka ek mark.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (ii)',
+      lead:'Agle din wahi aadmi kul '+total+' stairs chadha aur utra. Wo kis floor tak can pahunchaya?',
+      mode:'type', ansLabel:String(n), ansTyped:String(n),
+      work:[
+        {t:'Chadhna aur utarna dono &rarr; 2 &times; '+VS+'<sub>n</sub> = '+total, why:'Isliye ek taraf ka sum aadha hoga.'},
+        {t:VS+'<sub>n</sub> = '+(total/2), why:'Ab ye normal sum ka question ban gaya.'},
+        {t:''+(total/2)+' = '+VN+'/2 [2('+a+') + ('+VN+' &minus; 1)('+d+')]', why:''},
+        {t:'Solve karo &rarr; '+VN+' = '+n+', matlab '+ord(n)+' floor tak', why:'Doosra root minus me aata hai, reject.'}
+      ],
+      say:'Ulta sawaal hai — sum diya hai, floor poochha hai. Pehle 2 se divide karo.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (iii)',
+      lead:''+ord(n+2)+' floor tak jaane me kitni stairs chadhni padengi (sirf upar jaate hue)?',
+      mode:'type',
+      ansLabel:String(((n+2)*(2*a+(n+1)*d))/2), ansTyped:String(((n+2)*(2*a+(n+1)*d))/2),
+      work:[
+        {t:VA+' = '+a+', '+VD+' = '+d+', '+VN+' = '+(n+2), why:'Sirf upar jaana hai, wapas nahi.'},
+        {t:VS+'<sub>'+(n+2)+'</sub> = '+(n+2)+'/2 [2('+a+') + '+(n+1)+'('+d+')] = '+(((n+2)*(2*a+(n+1)*d))/2), why:''}
+      ],
+      say:'Is baar sirf ek taraf. Question dhyan se padho — 2 se multiply nahi karna.'
+    }
+  ]};
+}
+
+function csLadder(){
+  const steps=pick([10,8,12]);
+  const h0=pick([40,35,45]);
+  const dF=pick([6,5,8]), dE=pick([30,25,35]);
+  const topF=h0+(steps-1)*dF, topE=h0+(steps-1)*dE;
+  const k=pick([7,6,5]);
+  const kth=h0+(k-1)*dE;
+  const context=
+    '<b>Foldable ladder</b> — is ladder me <b>'+steps+' steps</b> hain. Foldi hui position (Position I) me do lagatar steps ke beech ka distance <b>'+dF+' cm</b> hai, '+
+    'aur khuli hui position (Position II) me ye distance <b>'+dE+' cm</b> ho jaata hai. Pehla step zameen se <b>'+h0+' cm</b> upar hai. '+
+    'Steps ki heights, order me, ek AP banati hain.';
+  return {context:context, parts:[
+    {
+      topic:'casestudy', kicker:'Case study · (i)',
+      lead:'Position I me ladder ka AP kya hoga?',
+      mode:'mcq', ansLabel:[0,1,2].map(i=>h0+i*dF).join(', ')+', …', seqOpts:true,
+      opts:opts4([
+        {lb:[0,1,2,3].map(i=>h0+i*dF).join(', ')+', '+DOTS, ok:true},
+        {lb:[0,1,2,3].map(i=>h0+i*dE).join(', ')+', '+DOTS, ok:false, why:'Ye Position II hai — khuli hui ladder ka gap '+dE+' cm hai.'},
+        {lb:[1,2,3,4].map(i=>i*dF).join(', ')+', '+DOTS, ok:false, why:'Pehla step zameen se '+h0+' cm upar hai — wahi '+VA+' hai.'},
+        {lb:[0,1,2,3].map(i=>h0-i*dF).join(', ')+', '+DOTS, ok:false, why:'Heights upar ja rahi hain, neeche nahi.'},
+        {lb:[0,1,2,3].map(i=>h0+i*2*dF).join(', ')+', '+DOTS, ok:false, why:'Har baar do gap add kar diye.'},
+        {lb:[0,1,2,3].map(i=>dF+i*dF).join(', ')+', '+DOTS, ok:false, why:'Pehla step '+h0+' cm par hai — wahi '+VA+' hai.'}
+      ]),
+      work:[
+        {t:'Pehla step '+h0+' cm par &rarr; '+VA+' = '+h0, why:'Zameen se pehli height.'},
+        {t:'Har agla step '+dF+' cm upar &rarr; '+VD+' = '+dF, why:''},
+        {t:'AP: '+[0,1,2,3].map(i=>h0+i*dF).join(', ')+', '+DOTS, why:VA+' se shuru karke '+VD+' add karte jao.'}
+      ],
+      say:'"AP likho" matlab pehle chaar terms likh do. '+VA+' aur '+VD+' pehchano, bas.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (ii)',
+      lead:'Position II me poori khuli ladder ki height kitni hogi, yaani sabse upar wale step ki height?',
+      mode:'type', ansLabel:String(topE), ansTyped:String(topE),
+      work:[
+        {t:VA+' = '+h0+', '+VD+' = '+dE+', '+VN+' = '+steps, why:'Khuli position me gap '+dE+' cm.'},
+        {t:'a<sub>'+steps+'</sub> = '+h0+' + ('+steps+' &minus; 1)('+dE+') = '+h0+' + '+((steps-1)*dE)+' = '+topE+' cm',
+         why:''+steps+' steps me gaps '+(steps-1)+' hote hain.'}
+      ],
+      say:'Yahan sum nahi — height poochhi hai, toh a<sub>n</sub>. Har step ki height add nahi karni.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (iii)',
+      lead:'Agar ladder sirf '+ord(k)+' step tak kholi jaaye (Position II wale gap se), toh us step ki height kitni hogi?',
+      mode:'type', ansLabel:String(kth), ansTyped:String(kth),
+      work:[
+        {t:VA+' = '+h0+', '+VD+' = '+dE, why:'Khuli position ka gap.'},
+        {t:'a<sub>'+k+'</sub> = '+h0+' + ('+k+' &minus; 1)('+dE+') = '+kth+' cm', why:''+k+' steps me gaps '+(k-1)+'.'}
+      ],
+      say:'Wahi n − 1. Case study me bhi formula wahi rehta hai.'
+    }
+  ]};
+}
+
+function csSeats(){
+  const f=pick([20,23,18]), k=pick([2,3,4]);
+  const rows=pick([12,15,10]);
+  const S=(rows*(2*f+(rows-1)*k))/2;
+  const r=pick([8,9,7]);
+  const context=
+    '<b>Auditorium</b> — ek hall me pehli row me <b>'+f+' seats</b> hain, doosri row me <b>'+(f+k)+'</b>, '+
+    'teesri row me <b>'+(f+2*k)+'</b>, aur aise hi peeche ki har row me <b>'+k+' seats zyada</b>. Hall me kul <b>'+rows+' rows</b> hain.';
+  return {context:context, parts:[
+    {
+      topic:'casestudy', kicker:'Case study · (i)',
+      lead:'Seats ka AP ka pehla term aur common difference kya hai?',
+      mode:'mcq', ansLabel:'a = '+f+', d = '+k,
+      opts:opts4([
+        {lb:VA+' = '+f+', '+VD+' = '+k, ok:true},
+        {lb:VA+' = '+k+', '+VD+' = '+f, ok:false, why:VA+' aur '+VD+' aapas me badal gaye.'},
+        {lb:VA+' = '+(f+k)+', '+VD+' = '+k, ok:false, why:'Ye doosri row hai. Pehli row hi '+VA+' hai.'},
+        {lb:VA+' = '+f+', '+VD+' = '+rows, ok:false, why:'Ye rows ki ginti hai, gap nahi.'}
+      ]),
+      work:[{t:'Pehli row = '+VA+' = '+f, why:''},
+            {t:VD+' = '+(f+k)+' &minus; '+f+' = '+k, why:'Har row me utni hi seats zyada.'}],
+      say:'Har case study yahin se shuru hoti hai — '+VA+' aur '+VD+' pakdo.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (ii)',
+      lead:''+ord(r)+' row me kitni seats hongi?',
+      mode:'type', ansLabel:String(f+(r-1)*k), ansTyped:String(f+(r-1)*k),
+      work:[
+        {t:VA+' = '+f+', '+VD+' = '+k+', '+VN+' = '+r, why:'Ek row ki baat hai, toh a<sub>n</sub> — sum nahi.'},
+        {t:'a<sub>'+r+'</sub> = '+f+' + ('+r+' &minus; 1)('+k+')', why:''+r+' rows me gaps '+(r-1)+' hote hain.'},
+        {t:'= '+f+' + '+((r-1)*k)+' = '+(f+(r-1)*k)+' seats', why:''}
+      ],
+      say:'Ek row = ek term. Saari rows = sum. Farak samajh lo.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (iii)',
+      lead:'Poore hall me kul kitni seats hain?',
+      mode:'type', ansLabel:String(S), ansTyped:String(S),
+      work:[
+        {t:'"Kul kitni" matlab saari rows milakar &rarr; '+VS+'<sub>'+rows+'</sub>', why:''},
+        {t:VS+'<sub>'+rows+'</sub> = '+rows+'/2 [2('+f+') + '+(rows-1)+'('+k+')] = '+S, why:''}
+      ],
+      say:'Ek hi case study me (ii) me a<sub>n</sub> aur (iii) me '+VS+'<sub>n</sub> — yahi to pehchan hai.'
+    }
+  ]};
+}
+
+function csSavings(){
+  const a=pick([100,150,200]);
+  let d=pick([50,25,75]); if(a===2*d||a===d)d=pick([25,75].filter(x=>x!==d))||25;
+  const yrs=pick([21,15,18]);
+  const S=(yrs*(2*a+(yrs-1)*d))/2;
+  const k=pick([10,12,8]);
+  const context=
+    '<b>Money box</b> — Shakila ne apni beti ke pehle birthday par money box me <b>&#8377;'+a+'</b> daale, '+
+    'doosre birthday par <b>&#8377;'+(a+d)+'</b>, teesre par <b>&#8377;'+(a+2*d)+'</b>, aur har saal <b>&#8377;'+d+'</b> zyada daalti gayi.';
+  return {context:context, parts:[
+    {
+      topic:'casestudy', kicker:'Case study · (i)',
+      lead:'Har saal daale gaye paise ek AP banate hain. Uska '+VD+' kya hai?',
+      seq:[a,a+d,a+2*d].map(String).join(', ')+', '+DOTS, seqSmall:true,
+      mode:'mcq', ansLabel:String(d),
+      opts:opts4([
+        {lb:String(d), ok:true},
+        {lb:String(a), ok:false, why:'Ye pehle saal ka amount hai, gap nahi.'},
+        {lb:String(a+d), ok:false, why:'Ye doosra term hai.'},
+        {lb:String(2*d), ok:false, why:'Ye do saal ka gap hai.'},
+        {lb:String(a+2*d), ok:false, why:'Ye teesra term hai.'},
+        {lb:MINUS+d, ok:false, why:'Sign ulta — paise badh rahe hain.'}
+      ]),
+      work:[
+        {t:VD+' = a&#8322; &minus; a&#8321; = '+(a+d)+' &minus; '+a+' = '+d, why:'Baad wale me se pehla subtract karo.'},
+        {t:'Check: a&#8323; &minus; a&#8322; = '+(a+2*d)+' &minus; '+(a+d)+' = '+d, why:'Equal aaya — AP confirm.'}
+      ],
+      say:'Pehla part hamesha ek mark ka aur hamesha aasan.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (ii)',
+      lead:''+ord(k)+' birthday par usne kitne paise daale?',
+      mode:'type', ansLabel:String(a+(k-1)*d), ansTyped:String(a+(k-1)*d),
+      work:[
+        {t:VA+' = '+a+', '+VD+' = '+d+', '+VN+' = '+k, why:'Us ek saal ki baat hai, toh a<sub>n</sub>.'},
+        {t:'a<sub>'+k+'</sub> = '+a+' + ('+k+' &minus; 1)('+d+') = '+a+' + '+((k-1)*d)+' = &#8377;'+(a+(k-1)*d), why:''}
+      ],
+      say:'"Us saal kitne daale" = ek term. "Kul kitne" = sum.'
+    },
+    {
+      topic:'casestudy', kicker:'Case study · (iii)',
+      lead:''+ord(yrs)+' birthday tak money box me kul kitne paise jama ho gaye?',
+      mode:'type', ansLabel:String(S), ansTyped:String(S),
+      work:[
+        {t:VA+' = '+a+', '+VD+' = '+d+', '+VN+' = '+yrs, why:''},
+        {t:VS+'<sub>'+yrs+'</sub> = '+yrs+'/2 [2('+a+') + '+(yrs-1)+'('+d+')] = '+S, why:'Saare saal milakar.'}
+      ],
+      say:'Ye bilkul wahi question hai jisse NCERT ne sum ka poora formula shuru kiya tha.'
+    }
+  ]};
+}
+
+const CASE_STUDIES=[csStairs, csStairsBack, csLadder, csSeats, csSavings];
+
+/* flatten a case study into consecutive questions that share one scenario */
+function buildCaseRun(count){
+  const out=[];
+  const used=new Set();
+  let guard=0;
+  while(out.length<count && guard++<40){
+    let fn=pick(CASE_STUDIES);
+    if(used.has(fn)&&used.size<CASE_STUDIES.length)continue;
+    used.add(fn);
+    const cs=fn();
+    cs.parts.forEach((q,i)=>{
+      q.context=cs.context;
+      q.caseFirst=(i===0);
+      out.push(q);
+    });
+  }
+  return out.slice(0, Math.max(3, Math.round(count/3)*3));
+}
+
+/* ════════════════════════════════════════════════════════════════
    POOLS — which generators live behind which door.
 
    The three doors follow the book:
@@ -2298,9 +3416,13 @@ function gTwoAPsDiff(lvl){
    ════════════════════════════════════════════════════════════════ */
 
 const POOLS={
-  pattern:[gIsAP,gIsAP,gIsAP,gFindD,gFindD,gFindAD,gBuild,gBuild,gNext,gSituation,gSituation],
+  pattern:[gIsAP,gIsAP,gIsAP,gFindD,gFindD,gFindAD,gBuild,gBuild,gNext,gFigure,gFigure,
+           gSituation,gSituation],
   formula:[gNth,gNth,gNth,gFindN,gFindN,gTable,gTable,gMissing,gMissing,gFromEnd,gMid,gMid,gSymb],
-  word:[gTwoTerms,gTwoTerms,gTranslate,gApply,gApply,gExceeds,gCountAP,gCountAP,gEqualTerms,gTwoAPsDiff,gTwoEq]
+  word:[gTwoTerms,gTwoTerms,gTranslate,gApply,gApply,gExceeds,gCountAP,gCountAP,gEqualTerms,
+        gTwoAPsDiff,gTwoEq],
+  sum:[gSumN,gSumN,gSumTo,gSumTable,gSumTable,gSumHowMany,gSumFromTerms,gSumFormula,
+       gSumMultiples,gSumApply,gSumApply,gSumSymb]
 };
 
 const LESSON_TOPIC_GEN={
@@ -2309,7 +3431,10 @@ const LESSON_TOPIC_GEN={
   table:gTable, missing:gMissing,
   situation:gSituation, translate:gTranslate, apply:gApply, twoeq:gTwoEq,
   twoterm:gTwoTerms, exceeds:gExceeds, countap:gCountAP,
-  equalterm:gEqualTerms, twoap:gTwoAPsDiff
+  equalterm:gEqualTerms, twoap:gTwoAPsDiff, figure:gFigure,
+  sumn:gSumN, sumto:gSumTo, sumtable:gSumTable, sumhow:gSumHowMany,
+  sumterms:gSumFromTerms, sumformula:gSumFormula, summult:gSumMultiples,
+  sumapply:gSumApply, sumsymb:gSumSymb
 };
 
 /* generator keys whose reported topic differs from the key itself */
@@ -2321,12 +3446,16 @@ const TOPIC_PART={
   nth:'formula', findn:'formula', fromend:'formula', mid:'formula', symb:'formula',
   table:'formula', missing:'formula',
   translate:'word', apply:'word', twoeq:'word', twoterm:'word',
-  exceeds:'word', countap:'word', equalterm:'word', twoap:'word'
+  exceeds:'word', countap:'word', equalterm:'word', twoap:'word',
+  figure:'pattern',
+  sumn:'sum', sumto:'sum', sumtable:'sum', sumhow:'sum', sumterms:'sum',
+  sumformula:'sum', summult:'sum', sumapply:'sum', sumsymb:'sum',
+  casestudy:'sum'
 };
 
 function genQuestion(part,lvl){
   if(part==='mixed'||part==='weekly'){
-    const all=POOLS.pattern.concat(POOLS.formula, POOLS.word);
+    const all=POOLS.pattern.concat(POOLS.formula, POOLS.word, POOLS.sum);
     return pick(all)(lvl);
   }
   let g=pick(POOLS[part]||POOLS.pattern);
@@ -2339,6 +3468,7 @@ function genForTopic(topic,lvl){
 }
 /* a run of fresh questions, no two identical prompts back to back */
 function buildRun(part,lvl,count){
+  if(part==='case')return buildCaseRun(count);      /* case studies come in linked threes */
   const out=[], seen=new Set();
   let guard=0;
   while(out.length<count && guard++<count*30){
@@ -2481,6 +3611,38 @@ const LESSONS={
         '15, 23, 31, 39, …<br>Yes, this forms an AP<br>because we have a common difference, that is 8</div></div>'+
         '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.7">'+
         'This does not form an AP<br>because we do not have a common difference</div></div>'
+      ]},
+
+    { id:'p5', title:'Figure ka pattern', checks:['figure','figure','figure'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Board me aata hai</span><h2>Figure ko numbers me badlo</h2>'+
+        '<p>Board paper me aisa question aata hai jo NCERT ki exercise me hai hi nahi — figures ki ek series di hoti hai, aur poochha jaata hai agli figure me kitne honge.</p>'+
+        '<p>Tarika ek hi hai: <strong>figures ko ginti me badlo</strong>, phir dekho AP hai ya nahi.</p>'+
+        '<div class="say">Figure dekh ke andaza mat lagao. Pehle numbers likho.</div>',
+
+        '<span class="eyebrow">Jo AP hain</span><h2>Matchstick wale</h2>'+
+        '<p>Ek line me squares banao. Pehle square ke liye 4 matchstick. Uske baad har square ko sirf <strong>3</strong> chahiye — ek side toh pehle se lagi hui hai.</p>'+
+        '<div class="box"><div class="seq">4, 7, 10, 13, …</div>'+
+        '<div class="cap"><i class="va">a</i> = 4, <i class="vd">d</i> = 3 — ye AP hai</div></div>'+
+        '<p>Triangles me: 3, 5, 7, 9 — <i class="vd">d</i> = 2. Perimeter me: 4, 8, 12, 16 — <i class="vd">d</i> = 4.</p>',
+
+        '<span class="eyebrow">Jo AP nahi hain</span><h2>Unit squares wala jaal</h2>'+
+        '<p>Fig (i) ek 1×1 square, Fig (ii) 2×2, Fig (iii) 3×3. Har figure me kitne unit squares?</p>'+
+        '<div class="box"><div class="seq">1, 4, 9, 16, …</div>'+
+        '<div class="cap">Gaps 3, 5, 7 — barabar nahi. <strong>Ye AP nahi hai</strong></div></div>'+
+        '<p>Yahan nth figure me <strong>n²</strong> unit squares hote hain. AP ka formula lagaoge toh answer galat aayega.</p>'+
+        '<div class="say">AP ka rule sirf AP pe chalega — wahi cheat code wali baat.</div>',
+
+        '<span class="eyebrow">Asli board question</span><h2>Do figures milakar</h2>'+
+        '<p><em>"nth figure aur (n + 2)th figure ke unit squares ka sum 290 hai. n find karo."</em></p>'+
+        '<div class="box"><div class="seq">'+
+        'n² + (n + 2)² = 290<br>'+
+        'n² + n² + 4n + 4 = 290<br>'+
+        '2n² + 4n − 286 = 0<br>'+
+        'n² + 2n − 143 = 0<br>'+
+        '(n + 13)(n − 11) = 0</div>'+
+        '<div class="cap">n = 11 &nbsp;·&nbsp; n = −13 reject, figure number minus me nahi hota</div></div>'+
+        '<div class="say">Do root aayein toh jo possible nahi hai use reject karo. Wo reject karna hi asli answer hai.</div>'
       ]}
   ],
 
@@ -2631,6 +3793,208 @@ const LESSONS={
       ]},
   ],
 
+  sum:[
+    { id:'s1', title:'Gauss wala trick', checks:['sumsymb','sumn','sumn'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Wahi purana sawaal</span><h2>1 se 100 tak add karo</h2>'+
+        '<p>Gauss se ye poochha gaya tha jab wo das saal ka tha. Usne turant bata diya — <strong>5050</strong>.</p>'+
+        '<div class="box"><div class="seq">'+
+        'S = 1 + 2 + 3 + … + 99 + 100<br>'+
+        'S = 100 + 99 + … + 3 + 2 + 1<br>'+
+        '<br>2S = 101 + 101 + … + 101 &nbsp;(100 baar)<br>'+
+        '2S = 100 × 101 → S = 5050</div></div>'+
+        '<div class="say">Ulta likh ke add kar do. Har jodi ka total ek hi aata hai — bas.</div>',
+
+        '<span class="eyebrow">Formula banate hain</span><h2>Wahi trick, general AP par</h2>'+
+        '<div class="box"><div class="seq">'+
+        'S = <i class="va">a</i> + (<i class="va">a</i>+<i class="vd">d</i>) + … + [<i class="va">a</i>+(<i class="vn">n</i>−1)<i class="vd">d</i>]<br>'+
+        'S = [<i class="va">a</i>+(<i class="vn">n</i>−1)<i class="vd">d</i>] + … + (<i class="va">a</i>+<i class="vd">d</i>) + <i class="va">a</i><br>'+
+        '<br>2S = <i class="vn">n</i> [2<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>]</div></div>'+
+        '<div class="box"><div class="big"><i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 [2<i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i>]</div>'+
+        '<div class="cap">Har jodi ka total 2<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>, aur aisi <i class="vn">n</i> jodiyan</div></div>',
+
+        '<span class="eyebrow">Sabse badi confusion</span><h2>a<sub>n</sub> aur S<sub>n</sub> ek nahi hain</h2>'+
+        '<div class="box"><div class="seq">'+
+        'a<sub>n</sub> = <i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i><br>'+
+        '<span class="cap">→ sirf <b>ek</b> term</span><br><br>'+
+        '<i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 [2<i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i>]<br>'+
+        '<span class="cap">→ pehle <b>n terms milakar</b></span></div></div>'+
+        '<p>Question me <strong>"total", "kul milakar", "sum"</strong> dikhe toh S<sub>n</sub>. Warna a<sub>n</sub>.</p>'+
+        '<div class="say">Dono formule me [2a + (n−1)d] jaisa hi dikhta hai. Isiliye log galti karte hain. Dhyan se dekho.</div>',
+
+        '<span class="eyebrow">Karke dekho</span><h2>8, 3, −2, … ke pehle 22 terms</h2>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="va">a</i> = 8, <i class="vd">d</i> = 3 − 8 = −5, <i class="vn">n</i> = 22<br>'+
+        '<i class="vs">S</i><sub>22</sub> = 22/2 [16 + 21(−5)]<br>'+
+        '= 11 (16 − 105)<br>'+
+        '= 11 × (−89) = <strong>−979</strong></div></div>'+
+        '<div class="say">Sum minus me bhi aa sakta hai. Ghabrana nahi — AP neeche ja raha hai toh sum bhi neeche jaayega.</div>'
+      ]},
+
+    { id:'s2', title:'Jab last term diya ho', checks:['sumto','sumto','sumtable'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Chhota formula</span><h2>S<sub>n</sub> = n/2 (a + l)</h2>'+
+        '<p>Bade formula me 2<i class="va">a</i> ko <i class="va">a</i> + <i class="va">a</i> likh do:</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vn">n</i>/2 [<i class="va">a</i> + (<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>)]<br>'+
+        '= <i class="vn">n</i>/2 [<i class="va">a</i> + a<sub>n</sub>]</div></div>'+
+        '<div class="box"><div class="big"><i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 (<i class="va">a</i> + l)</div>'+
+        '<div class="cap">Ye alag formula nahi hai — wahi hai, chhoti shakal me</div></div>'+
+        '<div class="say">Jab <i class="vd">d</i> na diya ho lekin pehla aur aakhri term diye hon, tab ye sabse tez hai.</div>',
+
+        '<span class="eyebrow">Ek step pehle</span><h2>n toh nikalna hi padega</h2>'+
+        '<p>Series aisi di hoti hai: <strong>7 + 10½ + 14 + … + 84</strong>. Sum ke liye <i class="vn">n</i> chahiye, aur wo diya nahi hai.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="va">a</i> = 7, <i class="vd">d</i> = 3½, l = 84<br>'+
+        '84 = 7 + (<i class="vn">n</i> − 1)(3½) → <i class="vn">n</i> = 23<br>'+
+        '<i class="vs">S</i><sub>23</sub> = 23/2 (7 + 84) = 23/2 × 91</div></div>'+
+        '<div class="say">Last term wala formula pehle <i class="vn">n</i> maangta hai. Wo step skip mat karna.</div>',
+
+        '<span class="eyebrow">Paanch cheezein</span><h2>Koi teen pata ho toh baaki nikal aayenge</h2>'+
+        '<p>Ab tumhare paas <strong>paanch</strong> cheezein hain — <i class="va">a</i>, <i class="vd">d</i>, <i class="vn">n</i>, a<sub>n</sub> aur <i class="vs">S</i><sub>n</sub>.</p>'+
+        '<p>NCERT ka teesra question yahi hai: table me teen diye hain, do nikalne hain.</p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<i class="va">a</i>, <i class="vd">d</i>, <i class="vn">n</i> diye hain → a<sub>n</sub> aur <i class="vs">S</i><sub>n</sub> nikalo<br>'+
+        '<i class="va">a</i>, a<sub>n</sub>, <i class="vn">n</i> diye hain → <i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2(<i class="va">a</i> + a<sub>n</sub>) sabse tez<br>'+
+        '<i class="va">a</i>, <i class="vd">d</i>, <i class="vs">S</i><sub>n</sub> diye hain → quadratic banega</div></div>'+
+        '<div class="say">Har baar sochо — kaunsa formula sabse chhota rasta hai. Lamba rasta bhi sahi hai, bas time zyada lagega.</div>'
+      ]},
+
+    { id:'s3', title:'Sum diya hai, n find karo', checks:['sumhow','sumhow','sumterms'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Ulta sawaal</span><h2>Kitne terms lene par ye sum aayega?</h2>'+
+        '<p><em>"9, 17, 25, … ke kitne terms lene par sum 636 aayega?"</em></p>'+
+        '<p>Yahan <i class="vn">n</i> hi unknown hai, aur wo formula ke <strong>andar do jagah</strong> baitha hai. Isliye quadratic banega.</p>'+
+        '<div class="box"><div class="seq">'+
+        '636 = <i class="vn">n</i>/2 [18 + (<i class="vn">n</i> − 1)8]<br>'+
+        '1272 = <i class="vn">n</i> [10 + 8<i class="vn">n</i>]<br>'+
+        '8<i class="vn">n</i>² + 10<i class="vn">n</i> − 1272 = 0<br>'+
+        '4<i class="vn">n</i>² + 5<i class="vn">n</i> − 636 = 0<br>'+
+        '<i class="vn">n</i> = 12</div></div>'+
+        '<div class="say">Quadratic dekh ke ghabrana nahi. Splitting the middle term tumhe aati hai — wahi lagana hai.</div>',
+
+        '<span class="eyebrow">Do root</span><h2>Ek ko reject karna padta hai</h2>'+
+        '<p>Jab <i class="vd">d</i> minus me ho, quadratic ke <strong>do</strong> positive root aa sakte hain. 200 logs wala famous question:</p>'+
+        '<div class="box"><div class="seq">'+
+        '20, 19, 18, … &nbsp; <i class="vs">S</i><sub>n</sub> = 200<br>'+
+        '<i class="vn">n</i>² − 41<i class="vn">n</i> + 400 = 0<br>'+
+        '(<i class="vn">n</i> − 16)(<i class="vn">n</i> − 25) = 0<br>'+
+        '<i class="vn">n</i> = 16 &nbsp;ya&nbsp; <i class="vn">n</i> = 25</div></div>'+
+        '<p><i class="vn">n</i> = 25 rakho toh a<sub>25</sub> = 20 + 24(−1) = <strong>−4</strong>. Logs minus me nahi ho sakte, toh 25 reject.</p>'+
+        '<div class="say">Dono root check karo. Jo physically possible nahi, use reject karna hi poore marks dilata hai.</div>',
+
+        '<span class="eyebrow">n hamesha</span><h2>Positive whole number</h2>'+
+        '<ul>'+
+        '<li>Fraction aaya → wo term hai hi nahi</li>'+
+        '<li>Minus aaya → reject</li>'+
+        '<li>Zero aaya → reject</li>'+
+        '</ul>'+
+        '<p><i class="vn">n</i> ginti ka number hai. Koi 7.5th term nahi hota, aur koi −3rd term nahi hota.</p>'+
+        '<div class="say">Ye ek line likh dena answer me — "since n is the number of terms, it must be a positive integer". Free ka marks hai.</div>'
+      ]},
+
+    { id:'s4', title:'Sum se term wapas', checks:['sumformula','sumformula','sumsymb'], lvl:2,
+      cards:[
+        '<span class="eyebrow">Ulti ganga</span><h2>a<sub>n</sub> = S<sub>n</sub> − S<sub>n−1</sub></h2>'+
+        '<p>Agar sum ka formula diya ho aur term poochha ho, toh ek hi rasta hai.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vs">S</i><sub>n</sub> = a₁ + a₂ + … + a<sub>n−1</sub> + a<sub>n</sub><br>'+
+        '<i class="vs">S</i><sub>n−1</sub> = a₁ + a₂ + … + a<sub>n−1</sub><br>'+
+        '<br>Subtract karo → sirf a<sub>n</sub> bachta hai</div></div>'+
+        '<div class="say">Do sums ka fark hi ek term hota hai. Baaki sab cancel.</div>',
+
+        '<span class="eyebrow">Example</span><h2>S<sub>n</sub> = 4n − n²</h2>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vs">S</i>₁ = 4 − 1 = 3 → <i class="va">a</i> = 3<br>'+
+        '<i class="vs">S</i>₂ = 8 − 4 = 4<br>'+
+        'a₂ = <i class="vs">S</i>₂ − <i class="vs">S</i>₁ = 4 − 3 = 1<br>'+
+        '<i class="vd">d</i> = 1 − 3 = −2</div></div>'+
+        '<p>Aur <i class="vs">S</i>₁ hamesha <i class="va">a</i> hi hota hai — pehle ek term ka sum wahi ek term hai.</p>',
+
+        '<span class="eyebrow">Doosri shakal</span><h2>a<sub>n</sub> = 3 + 4n diya ho toh?</h2>'+
+        '<p>Yahan <i class="vn">n</i> ki jagah 1, 2, 3 rakh ke terms bana lo.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vn">n</i> = 1 → 7,&nbsp; <i class="vn">n</i> = 2 → 11,&nbsp; <i class="vn">n</i> = 3 → 15<br>'+
+        '<i class="vd">d</i> = 4 — har baar wahi → ye AP hai</div></div>'+
+        '<p>Shortcut: a<sub>n</sub> me <i class="vn">n</i> ke aage jo number hai, <strong>wahi <i class="vd">d</i> hai</strong>. Aur <i class="va">a</i> = <i class="vn">n</i> = 1 rakh kar.</p>'+
+        '<div class="say">Ye pehchan lo toh ye question ek line ka ho jaata hai.</div>'
+      ]},
+
+    { id:'s5', title:'Sum ke word problems', checks:['sumapply','summult','sumapply'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Ek shabd</span><h2>Term ya sum — kaise pehchano</h2>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14.5px;line-height:1.9">'+
+        '"<b>30th din</b> ka penalty kitna?" → a<sub>n</sub><br>'+
+        '"<b>30 din</b> ka penalty kitna?" → <i class="vs">S</i><sub>n</sub><br><br>'+
+        '"<b>8th row</b> me kitni seats?" → a<sub>n</sub><br>'+
+        '"<b>Hall me kul</b> kitni seats?" → <i class="vs">S</i><sub>n</sub></div></div>'+
+        '<p>Ek chhota sa shabd — "kul", "total", "sab milakar" — poora formula badal deta hai.</p>'+
+        '<div class="say">Question do baar padho. Pehli baar samajhne ke liye, doosri baar ye dekhne ke liye ki term poochha hai ya sum.</div>',
+
+        '<span class="eyebrow">Multiples</span><h2>Ye hamesha AP hote hain</h2>'+
+        '<div class="box"><div class="seq">'+
+        '8 ke pehle 15 multiples<br>'+
+        '8, 16, 24, … → <i class="va">a</i> = 8, <i class="vd">d</i> = 8<br>'+
+        '<i class="vs">S</i><sub>15</sub> = 15/2 [16 + 14(8)] = 960</div></div>'+
+        '<p>Multiples wale AP me <i class="va">a</i> aur <i class="vd">d</i> dono wahi divisor hote hain.</p>'+
+        '<p>Aur ek yaad rakhne layak baat: pehle <i class="vn">n</i> odd numbers ka sum hamesha <strong>n²</strong> hota hai. 1 + 3 + 5 + 7 = 16 = 4².</p>',
+
+        '<span class="eyebrow">Aana-jaana</span><h2>Jahan 2 se multiply karna padta hai</h2>'+
+        '<p>Potato race, paani ka can, seedhi chadhna-utarna — in sab me aadmi <strong>jaata bhi hai aur wapas bhi aata hai</strong>.</p>'+
+        '<div class="box"><div class="seq">'+
+        'Ek taraf ka total = <i class="vs">S</i><sub>n</sub><br>'+
+        'Aana-jaana dono = 2 × <i class="vs">S</i><sub>n</sub></div></div>'+
+        '<div class="say">Sum nikal liya matlab kaam khatam nahi. Sabse zyada marks yahin katte hain — 2 se multiply karna bhool jaate hain.</div>',
+
+        '<span class="eyebrow">Aur ek</span><h2>Ghatta hua AP</h2>'+
+        '<p><em>"₹700 ko 7 prizes me baanto, har prize pichle se ₹20 kam."</em></p>'+
+        '<p>"Kam" dikha toh <i class="vd">d</i> <strong>minus</strong> me hai. <i class="vd">d</i> = −20.</p>'+
+        '<div class="box"><div class="seq">'+
+        '700 = 7/2 [2<i class="va">a</i> + 6(−20)]<br>'+
+        '200 = 2<i class="va">a</i> − 120 → <i class="va">a</i> = 160<br>'+
+        'Prizes: 160, 140, 120, 100, 80, 60, 40</div></div>'+
+        '<div class="say">Aakhir me saare prizes likhna. Sirf <i class="va">a</i> likhoge toh poore marks nahi milenge.</div>'
+      ]},
+
+    { id:'s6', title:'Case study kaise banate hain', checks:['sumapply','sumn','sumsymb'], also:['casestudy'], lvl:2,
+      cards:[
+        '<span class="eyebrow">Section E</span><h2>Ek scenario, teen sawaal</h2>'+
+        '<p>Board paper me teen case studies aate hain, <strong>4-4 marks</strong> ke. Har ek me ek kahani hoti hai aur uspe teen sawaal:</p>'+
+        '<ul>'+
+        '<li><strong>(i)</strong> 1 mark — AP hai ya nahi, ya <i class="va">a</i> aur <i class="vd">d</i> kya hai</li>'+
+        '<li><strong>(ii)</strong> 1 mark — koi ek term (a<sub>n</sub>)</li>'+
+        '<li><strong>(iii)</strong> 2 marks — sum, ya koi ulta sawaal. Isme OR ka choice hota hai</li>'+
+        '</ul>'+
+        '<div class="say">Pehle do parts lagbhag free ke hote hain. Wo mat chhodna.</div>',
+
+        '<span class="eyebrow">Asli paper se</span><h2>Multistorey building</h2>'+
+        '<p><em>Ground floor se first floor tak 10 stairs, first se second 24, second se third 38, aur aise hi.</em></p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<b>(i)</b> 10, 24, 38 AP hai? → gaps 14, 14 → haan, <i class="vd">d</i> = 14<br>'+
+        '<b>(ii)</b> 11th floor tak kul stairs → <i class="vs">S</i><sub>11</sub> = 11/2[20 + 140] = 880<br>'+
+        '<b>(iii)</b> 6th floor tak aana-jaana → 2 × <i class="vs">S</i>₆ = 2 × 270 = 540</div></div>'+
+        '<p>Dekha? (ii) me sum, (iii) me sum ka double. Ek hi kahani, teen alag formule.</p>',
+
+        '<span class="eyebrow">Asli paper se</span><h2>Foldable ladder</h2>'+
+        '<p><em>10 steps. Foldi hui halat me steps ke beech 6 cm, khuli halat me 30 cm. Pehla step zameen se 40 cm upar.</em></p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<b>(i)</b> Position I ka AP → 40, 46, 52, 58, …<br>'+
+        '<b>(ii)</b> Position II ka AP → 40, 70, 100, 130, …<br>'+
+        '<b>(iii)</b> Position II ki poori height → a₁₀ = 40 + 9(30) = 310 cm</div></div>'+
+        '<p>Yahan sum nahi laga — height poochhi thi, toh a<sub>n</sub>. Har case study me sum nahi hota.</p>'+
+        '<div class="say">Har part ko alag question maano. Kahani ek hai, formula alag alag.</div>',
+
+        '<span class="eyebrow">Likhne ka tarika</span><h2>Chhote steps, poore marks</h2>'+
+        '<ul>'+
+        '<li>Har part ka number likho — (i), (ii), (iii)</li>'+
+        '<li>Given AP pehle likho, phir <i class="va">a</i> aur <i class="vd">d</i></li>'+
+        '<li>Formula box karke likho, phir value daalo</li>'+
+        '<li>Answer sentence me — "hence there are 880 stairs"</li>'+
+        '</ul>'+
+        '<div class="say">(iii) me OR hota hai — dono padho, jo aasan lage wo banao. Dono banane ki zarurat nahi.</div>'
+      ]}
+  ],
+
   word:[
 
     { id:'w2', title:'English se equation banao', checks:['translate','translate','translate'], lvl:1,
@@ -2763,6 +4127,7 @@ const LESSONS={
 };
 
 /* the sum formula was promised for the next class — say so, don't half-teach it */
+/* kept for the record — the sum is now taught, so nothing is locked */
 const NEXT_UP={
   title:'Sum of n terms',
   ex:'Exercise 5.3',
@@ -2776,7 +4141,9 @@ const PARTS={
   formula:{ name:'a + (n − 1)d', kicker:'Part 02 · Exercise 5.2',
     blurb:'Koi bhi term, koi bhi position, table, missing boxes, middle term.' },
   word:{ name:'Exam sawaal', kicker:'Part 03 · Exercise 5.2',
-    blurb:'Do term diye hain, kitne numbers hain, word problems. Marks yahin se aate hain.' }
+    blurb:'Do term diye hain, kitne numbers hain, word problems. Marks yahin se aate hain.' },
+  sum:{ name:'Sum (S\u2099)', kicker:'Part 04 · Exercise 5.3',
+    blurb:'Saare terms milakar kitna. Gauss wala trick, table, aur sum ke word problems.' }
 };
 
 /* ════════════════════════════════════════════════════════════════
@@ -2803,8 +4170,8 @@ function paintMenu(){
   const bank=(p&&p.bank)?p.bank.length:0;
   const rev=$('revN');
   rev.hidden=bank===0; rev.textContent=bank;
-  ['pattern','formula','word'].forEach(part=>{
-    const key={pattern:'Pat',formula:'Form',word:'Word'}[part];
+  ['pattern','formula','word','sum'].forEach(part=>{
+    const key={pattern:'Pat',formula:'Form',word:'Word',sum:'Sum'}[part];
     const L=$('pill'+key+'L'), P=$('pill'+key+'P');
     const total=LESSONS[part].length;
     const done=LESSONS[part].filter(l=>p&&p.lessons&&p.lessons[l.id]).length;
@@ -2817,8 +4184,7 @@ function paintMenu(){
   const wk=isoWeekKey(new Date());
   const w=p&&p.weekly&&p.weekly[wk];
   $('weeklyMeta').textContent=w?('Tumhara best: '+w.best+' · attempt '+w.attempts):'';
-  $('soonFormula').innerHTML=NEXT_UP.body;
-  $('soonNote').textContent=NEXT_UP.note;
+
 }
 
 /* ── hub ──────────────────────────────────────────────────── */
@@ -2926,7 +4292,9 @@ function paintQ(){
   $('hudCombo').textContent='×'+(G.combo+1);
   $('hudBar').style.width=Math.round(G.i/G.list.length*100)+'%';
 
-  let h='<div class="qkicker">'+esc(q.kicker||'')+'</div>';
+  let h='';
+  if(q.context)h+='<div class="qcontext">'+q.context+'</div>';
+  h+='<div class="qkicker">'+esc(q.kicker||'')+'</div>';
   if(q.lead)h+='<p class="qtext lead">'+q.lead+'</p>';
   if(q.seq){
     const cls='qseq'+((q.seq.length>34||q.seqSmall)?' long':'');
@@ -3052,7 +4420,7 @@ function next(){
   else paintQ();
 }
 function finishStage(){
-  if(!G.revenge && G.missed.length && G.mode!=='weekly' && G.mode!=='check'){
+  if(!G.revenge && G.missed.length && G.mode!=='weekly' && G.mode!=='check' && G.mode!=='case'){
     const list=G.missed.map(q=>{
       if(q.opts)q.opts=shuffle(q.opts);
       return q;
@@ -3134,7 +4502,8 @@ function endRun(){
   show('report');
 }
 
-const MODE_NAME={pattern:'Pattern',formula:'a + (n−1)d',word:'Word problems',mixed:'Mixed test',weekly:'Hafte ka paper',revenge:'Badla mode'};
+const MODE_NAME={pattern:'Pattern',formula:'a + (n−1)d',word:'Exam sawaal',sum:'Sum (Sₙ)',
+  case:'Case study',mixed:'Mixed test',weekly:'Hafte ka paper',revenge:'Badla mode'};
 function paintReport(acc,secs,total){
   const p=Store.p();
   const who=Store.d.who||'Student';
@@ -3360,6 +4729,8 @@ $('profChip').addEventListener('click',sheetProfile);
 $('doorPat').addEventListener('click',()=>{ Snd.tap(); openHub('pattern'); });
 $('doorForm').addEventListener('click',()=>{ Snd.tap(); openHub('formula'); });
 $('doorWord').addEventListener('click',()=>{ Snd.tap(); openHub('word'); });
+$('doorSum').addEventListener('click',()=>{ Snd.tap(); openHub('sum'); });
+$('doorCase').addEventListener('click',()=>{ Snd.tap(); startRun('case',2,{mode:'case'}); });
 $('doorMixed').addEventListener('click',()=>{ Snd.tap(); startRun('mixed',2,{mode:'mixed'}); });
 $('doorRevenge').addEventListener('click',()=>{ Snd.tap(); startRevenge(); });
 $('doorWeekly').addEventListener('click',()=>{ Snd.tap(); startWeekly(); });
@@ -3393,8 +4764,11 @@ globalThis.__ap={
   F,Fadd,Fsub,Fmul,Fdiv,Fscale,Fneg,Feq,Fis0,Fnum,fmt,decStr,moneyStr,fracStr,typedForm,
   term,seqStr,nOf,MINUS,
   POOLS,TOPICS,TOPIC_PART,LESSONS,PARTS,CFG,
-  genQuestion,genForTopic,buildRun,gIsAP,gFindD,gFindAD,gBuild,gNth,gFindN,gFromEnd,gMid,gSymb,
-  gSituation,gTranslate,gApply,gTwoEq,
+  genQuestion,genForTopic,buildRun,buildCaseRun,CASE_STUDIES,
+  gIsAP,gFindD,gFindAD,gBuild,gNth,gFindN,gFromEnd,gMid,gSymb,
+  gSituation,gTranslate,gApply,gTwoEq,gFigure,
+  gSumN,gSumTo,gSumTable,gSumHowMany,gSumFromTerms,gSumFormula,gSumMultiples,gSumApply,gSumSymb,
+  sumN,signed,
   mulberry32,strHash,isoWeekKey,
   setRng(f){ rng=f; }, getRng(){ return rng; },
   topicOfCheck, CHECK_TOPIC,

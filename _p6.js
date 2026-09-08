@@ -128,6 +128,38 @@ const LESSONS={
         '15, 23, 31, 39, …<br>Yes, this forms an AP<br>because we have a common difference, that is 8</div></div>'+
         '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.7">'+
         'This does not form an AP<br>because we do not have a common difference</div></div>'
+      ]},
+
+    { id:'p5', title:'Figure ka pattern', checks:['figure','figure','figure'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Board me aata hai</span><h2>Figure ko numbers me badlo</h2>'+
+        '<p>Board paper me aisa question aata hai jo NCERT ki exercise me hai hi nahi — figures ki ek series di hoti hai, aur poochha jaata hai agli figure me kitne honge.</p>'+
+        '<p>Tarika ek hi hai: <strong>figures ko ginti me badlo</strong>, phir dekho AP hai ya nahi.</p>'+
+        '<div class="say">Figure dekh ke andaza mat lagao. Pehle numbers likho.</div>',
+
+        '<span class="eyebrow">Jo AP hain</span><h2>Matchstick wale</h2>'+
+        '<p>Ek line me squares banao. Pehle square ke liye 4 matchstick. Uske baad har square ko sirf <strong>3</strong> chahiye — ek side toh pehle se lagi hui hai.</p>'+
+        '<div class="box"><div class="seq">4, 7, 10, 13, …</div>'+
+        '<div class="cap"><i class="va">a</i> = 4, <i class="vd">d</i> = 3 — ye AP hai</div></div>'+
+        '<p>Triangles me: 3, 5, 7, 9 — <i class="vd">d</i> = 2. Perimeter me: 4, 8, 12, 16 — <i class="vd">d</i> = 4.</p>',
+
+        '<span class="eyebrow">Jo AP nahi hain</span><h2>Unit squares wala jaal</h2>'+
+        '<p>Fig (i) ek 1×1 square, Fig (ii) 2×2, Fig (iii) 3×3. Har figure me kitne unit squares?</p>'+
+        '<div class="box"><div class="seq">1, 4, 9, 16, …</div>'+
+        '<div class="cap">Gaps 3, 5, 7 — barabar nahi. <strong>Ye AP nahi hai</strong></div></div>'+
+        '<p>Yahan nth figure me <strong>n²</strong> unit squares hote hain. AP ka formula lagaoge toh answer galat aayega.</p>'+
+        '<div class="say">AP ka rule sirf AP pe chalega — wahi cheat code wali baat.</div>',
+
+        '<span class="eyebrow">Asli board question</span><h2>Do figures milakar</h2>'+
+        '<p><em>"nth figure aur (n + 2)th figure ke unit squares ka sum 290 hai. n find karo."</em></p>'+
+        '<div class="box"><div class="seq">'+
+        'n² + (n + 2)² = 290<br>'+
+        'n² + n² + 4n + 4 = 290<br>'+
+        '2n² + 4n − 286 = 0<br>'+
+        'n² + 2n − 143 = 0<br>'+
+        '(n + 13)(n − 11) = 0</div>'+
+        '<div class="cap">n = 11 &nbsp;·&nbsp; n = −13 reject, figure number minus me nahi hota</div></div>'+
+        '<div class="say">Do root aayein toh jo possible nahi hai use reject karo. Wo reject karna hi asli answer hai.</div>'
       ]}
   ],
 
@@ -278,6 +310,208 @@ const LESSONS={
       ]},
   ],
 
+  sum:[
+    { id:'s1', title:'Gauss wala trick', checks:['sumsymb','sumn','sumn'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Wahi purana sawaal</span><h2>1 se 100 tak add karo</h2>'+
+        '<p>Gauss se ye poochha gaya tha jab wo das saal ka tha. Usne turant bata diya — <strong>5050</strong>.</p>'+
+        '<div class="box"><div class="seq">'+
+        'S = 1 + 2 + 3 + … + 99 + 100<br>'+
+        'S = 100 + 99 + … + 3 + 2 + 1<br>'+
+        '<br>2S = 101 + 101 + … + 101 &nbsp;(100 baar)<br>'+
+        '2S = 100 × 101 → S = 5050</div></div>'+
+        '<div class="say">Ulta likh ke add kar do. Har jodi ka total ek hi aata hai — bas.</div>',
+
+        '<span class="eyebrow">Formula banate hain</span><h2>Wahi trick, general AP par</h2>'+
+        '<div class="box"><div class="seq">'+
+        'S = <i class="va">a</i> + (<i class="va">a</i>+<i class="vd">d</i>) + … + [<i class="va">a</i>+(<i class="vn">n</i>−1)<i class="vd">d</i>]<br>'+
+        'S = [<i class="va">a</i>+(<i class="vn">n</i>−1)<i class="vd">d</i>] + … + (<i class="va">a</i>+<i class="vd">d</i>) + <i class="va">a</i><br>'+
+        '<br>2S = <i class="vn">n</i> [2<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>]</div></div>'+
+        '<div class="box"><div class="big"><i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 [2<i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i>]</div>'+
+        '<div class="cap">Har jodi ka total 2<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>, aur aisi <i class="vn">n</i> jodiyan</div></div>',
+
+        '<span class="eyebrow">Sabse badi confusion</span><h2>a<sub>n</sub> aur S<sub>n</sub> ek nahi hain</h2>'+
+        '<div class="box"><div class="seq">'+
+        'a<sub>n</sub> = <i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i><br>'+
+        '<span class="cap">→ sirf <b>ek</b> term</span><br><br>'+
+        '<i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 [2<i class="va">a</i> + (<i class="vn">n</i> − 1)<i class="vd">d</i>]<br>'+
+        '<span class="cap">→ pehle <b>n terms milakar</b></span></div></div>'+
+        '<p>Question me <strong>"total", "kul milakar", "sum"</strong> dikhe toh S<sub>n</sub>. Warna a<sub>n</sub>.</p>'+
+        '<div class="say">Dono formule me [2a + (n−1)d] jaisa hi dikhta hai. Isiliye log galti karte hain. Dhyan se dekho.</div>',
+
+        '<span class="eyebrow">Karke dekho</span><h2>8, 3, −2, … ke pehle 22 terms</h2>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="va">a</i> = 8, <i class="vd">d</i> = 3 − 8 = −5, <i class="vn">n</i> = 22<br>'+
+        '<i class="vs">S</i><sub>22</sub> = 22/2 [16 + 21(−5)]<br>'+
+        '= 11 (16 − 105)<br>'+
+        '= 11 × (−89) = <strong>−979</strong></div></div>'+
+        '<div class="say">Sum minus me bhi aa sakta hai. Ghabrana nahi — AP neeche ja raha hai toh sum bhi neeche jaayega.</div>'
+      ]},
+
+    { id:'s2', title:'Jab last term diya ho', checks:['sumto','sumto','sumtable'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Chhota formula</span><h2>S<sub>n</sub> = n/2 (a + l)</h2>'+
+        '<p>Bade formula me 2<i class="va">a</i> ko <i class="va">a</i> + <i class="va">a</i> likh do:</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vn">n</i>/2 [<i class="va">a</i> + (<i class="va">a</i> + (<i class="vn">n</i>−1)<i class="vd">d</i>)]<br>'+
+        '= <i class="vn">n</i>/2 [<i class="va">a</i> + a<sub>n</sub>]</div></div>'+
+        '<div class="box"><div class="big"><i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2 (<i class="va">a</i> + l)</div>'+
+        '<div class="cap">Ye alag formula nahi hai — wahi hai, chhoti shakal me</div></div>'+
+        '<div class="say">Jab <i class="vd">d</i> na diya ho lekin pehla aur aakhri term diye hon, tab ye sabse tez hai.</div>',
+
+        '<span class="eyebrow">Ek step pehle</span><h2>n toh nikalna hi padega</h2>'+
+        '<p>Series aisi di hoti hai: <strong>7 + 10½ + 14 + … + 84</strong>. Sum ke liye <i class="vn">n</i> chahiye, aur wo diya nahi hai.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="va">a</i> = 7, <i class="vd">d</i> = 3½, l = 84<br>'+
+        '84 = 7 + (<i class="vn">n</i> − 1)(3½) → <i class="vn">n</i> = 23<br>'+
+        '<i class="vs">S</i><sub>23</sub> = 23/2 (7 + 84) = 23/2 × 91</div></div>'+
+        '<div class="say">Last term wala formula pehle <i class="vn">n</i> maangta hai. Wo step skip mat karna.</div>',
+
+        '<span class="eyebrow">Paanch cheezein</span><h2>Koi teen pata ho toh baaki nikal aayenge</h2>'+
+        '<p>Ab tumhare paas <strong>paanch</strong> cheezein hain — <i class="va">a</i>, <i class="vd">d</i>, <i class="vn">n</i>, a<sub>n</sub> aur <i class="vs">S</i><sub>n</sub>.</p>'+
+        '<p>NCERT ka teesra question yahi hai: table me teen diye hain, do nikalne hain.</p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<i class="va">a</i>, <i class="vd">d</i>, <i class="vn">n</i> diye hain → a<sub>n</sub> aur <i class="vs">S</i><sub>n</sub> nikalo<br>'+
+        '<i class="va">a</i>, a<sub>n</sub>, <i class="vn">n</i> diye hain → <i class="vs">S</i><sub>n</sub> = <i class="vn">n</i>/2(<i class="va">a</i> + a<sub>n</sub>) sabse tez<br>'+
+        '<i class="va">a</i>, <i class="vd">d</i>, <i class="vs">S</i><sub>n</sub> diye hain → quadratic banega</div></div>'+
+        '<div class="say">Har baar sochо — kaunsa formula sabse chhota rasta hai. Lamba rasta bhi sahi hai, bas time zyada lagega.</div>'
+      ]},
+
+    { id:'s3', title:'Sum diya hai, n find karo', checks:['sumhow','sumhow','sumterms'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Ulta sawaal</span><h2>Kitne terms lene par ye sum aayega?</h2>'+
+        '<p><em>"9, 17, 25, … ke kitne terms lene par sum 636 aayega?"</em></p>'+
+        '<p>Yahan <i class="vn">n</i> hi unknown hai, aur wo formula ke <strong>andar do jagah</strong> baitha hai. Isliye quadratic banega.</p>'+
+        '<div class="box"><div class="seq">'+
+        '636 = <i class="vn">n</i>/2 [18 + (<i class="vn">n</i> − 1)8]<br>'+
+        '1272 = <i class="vn">n</i> [10 + 8<i class="vn">n</i>]<br>'+
+        '8<i class="vn">n</i>² + 10<i class="vn">n</i> − 1272 = 0<br>'+
+        '4<i class="vn">n</i>² + 5<i class="vn">n</i> − 636 = 0<br>'+
+        '<i class="vn">n</i> = 12</div></div>'+
+        '<div class="say">Quadratic dekh ke ghabrana nahi. Splitting the middle term tumhe aati hai — wahi lagana hai.</div>',
+
+        '<span class="eyebrow">Do root</span><h2>Ek ko reject karna padta hai</h2>'+
+        '<p>Jab <i class="vd">d</i> minus me ho, quadratic ke <strong>do</strong> positive root aa sakte hain. 200 logs wala famous question:</p>'+
+        '<div class="box"><div class="seq">'+
+        '20, 19, 18, … &nbsp; <i class="vs">S</i><sub>n</sub> = 200<br>'+
+        '<i class="vn">n</i>² − 41<i class="vn">n</i> + 400 = 0<br>'+
+        '(<i class="vn">n</i> − 16)(<i class="vn">n</i> − 25) = 0<br>'+
+        '<i class="vn">n</i> = 16 &nbsp;ya&nbsp; <i class="vn">n</i> = 25</div></div>'+
+        '<p><i class="vn">n</i> = 25 rakho toh a<sub>25</sub> = 20 + 24(−1) = <strong>−4</strong>. Logs minus me nahi ho sakte, toh 25 reject.</p>'+
+        '<div class="say">Dono root check karo. Jo physically possible nahi, use reject karna hi poore marks dilata hai.</div>',
+
+        '<span class="eyebrow">n hamesha</span><h2>Positive whole number</h2>'+
+        '<ul>'+
+        '<li>Fraction aaya → wo term hai hi nahi</li>'+
+        '<li>Minus aaya → reject</li>'+
+        '<li>Zero aaya → reject</li>'+
+        '</ul>'+
+        '<p><i class="vn">n</i> ginti ka number hai. Koi 7.5th term nahi hota, aur koi −3rd term nahi hota.</p>'+
+        '<div class="say">Ye ek line likh dena answer me — "since n is the number of terms, it must be a positive integer". Free ka marks hai.</div>'
+      ]},
+
+    { id:'s4', title:'Sum se term wapas', checks:['sumformula','sumformula','sumsymb'], lvl:2,
+      cards:[
+        '<span class="eyebrow">Ulti ganga</span><h2>a<sub>n</sub> = S<sub>n</sub> − S<sub>n−1</sub></h2>'+
+        '<p>Agar sum ka formula diya ho aur term poochha ho, toh ek hi rasta hai.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vs">S</i><sub>n</sub> = a₁ + a₂ + … + a<sub>n−1</sub> + a<sub>n</sub><br>'+
+        '<i class="vs">S</i><sub>n−1</sub> = a₁ + a₂ + … + a<sub>n−1</sub><br>'+
+        '<br>Subtract karo → sirf a<sub>n</sub> bachta hai</div></div>'+
+        '<div class="say">Do sums ka fark hi ek term hota hai. Baaki sab cancel.</div>',
+
+        '<span class="eyebrow">Example</span><h2>S<sub>n</sub> = 4n − n²</h2>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vs">S</i>₁ = 4 − 1 = 3 → <i class="va">a</i> = 3<br>'+
+        '<i class="vs">S</i>₂ = 8 − 4 = 4<br>'+
+        'a₂ = <i class="vs">S</i>₂ − <i class="vs">S</i>₁ = 4 − 3 = 1<br>'+
+        '<i class="vd">d</i> = 1 − 3 = −2</div></div>'+
+        '<p>Aur <i class="vs">S</i>₁ hamesha <i class="va">a</i> hi hota hai — pehle ek term ka sum wahi ek term hai.</p>',
+
+        '<span class="eyebrow">Doosri shakal</span><h2>a<sub>n</sub> = 3 + 4n diya ho toh?</h2>'+
+        '<p>Yahan <i class="vn">n</i> ki jagah 1, 2, 3 rakh ke terms bana lo.</p>'+
+        '<div class="box"><div class="seq">'+
+        '<i class="vn">n</i> = 1 → 7,&nbsp; <i class="vn">n</i> = 2 → 11,&nbsp; <i class="vn">n</i> = 3 → 15<br>'+
+        '<i class="vd">d</i> = 4 — har baar wahi → ye AP hai</div></div>'+
+        '<p>Shortcut: a<sub>n</sub> me <i class="vn">n</i> ke aage jo number hai, <strong>wahi <i class="vd">d</i> hai</strong>. Aur <i class="va">a</i> = <i class="vn">n</i> = 1 rakh kar.</p>'+
+        '<div class="say">Ye pehchan lo toh ye question ek line ka ho jaata hai.</div>'
+      ]},
+
+    { id:'s5', title:'Sum ke word problems', checks:['sumapply','summult','sumapply'], lvl:1,
+      cards:[
+        '<span class="eyebrow">Ek shabd</span><h2>Term ya sum — kaise pehchano</h2>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14.5px;line-height:1.9">'+
+        '"<b>30th din</b> ka penalty kitna?" → a<sub>n</sub><br>'+
+        '"<b>30 din</b> ka penalty kitna?" → <i class="vs">S</i><sub>n</sub><br><br>'+
+        '"<b>8th row</b> me kitni seats?" → a<sub>n</sub><br>'+
+        '"<b>Hall me kul</b> kitni seats?" → <i class="vs">S</i><sub>n</sub></div></div>'+
+        '<p>Ek chhota sa shabd — "kul", "total", "sab milakar" — poora formula badal deta hai.</p>'+
+        '<div class="say">Question do baar padho. Pehli baar samajhne ke liye, doosri baar ye dekhne ke liye ki term poochha hai ya sum.</div>',
+
+        '<span class="eyebrow">Multiples</span><h2>Ye hamesha AP hote hain</h2>'+
+        '<div class="box"><div class="seq">'+
+        '8 ke pehle 15 multiples<br>'+
+        '8, 16, 24, … → <i class="va">a</i> = 8, <i class="vd">d</i> = 8<br>'+
+        '<i class="vs">S</i><sub>15</sub> = 15/2 [16 + 14(8)] = 960</div></div>'+
+        '<p>Multiples wale AP me <i class="va">a</i> aur <i class="vd">d</i> dono wahi divisor hote hain.</p>'+
+        '<p>Aur ek yaad rakhne layak baat: pehle <i class="vn">n</i> odd numbers ka sum hamesha <strong>n²</strong> hota hai. 1 + 3 + 5 + 7 = 16 = 4².</p>',
+
+        '<span class="eyebrow">Aana-jaana</span><h2>Jahan 2 se multiply karna padta hai</h2>'+
+        '<p>Potato race, paani ka can, seedhi chadhna-utarna — in sab me aadmi <strong>jaata bhi hai aur wapas bhi aata hai</strong>.</p>'+
+        '<div class="box"><div class="seq">'+
+        'Ek taraf ka total = <i class="vs">S</i><sub>n</sub><br>'+
+        'Aana-jaana dono = 2 × <i class="vs">S</i><sub>n</sub></div></div>'+
+        '<div class="say">Sum nikal liya matlab kaam khatam nahi. Sabse zyada marks yahin katte hain — 2 se multiply karna bhool jaate hain.</div>',
+
+        '<span class="eyebrow">Aur ek</span><h2>Ghatta hua AP</h2>'+
+        '<p><em>"₹700 ko 7 prizes me baanto, har prize pichle se ₹20 kam."</em></p>'+
+        '<p>"Kam" dikha toh <i class="vd">d</i> <strong>minus</strong> me hai. <i class="vd">d</i> = −20.</p>'+
+        '<div class="box"><div class="seq">'+
+        '700 = 7/2 [2<i class="va">a</i> + 6(−20)]<br>'+
+        '200 = 2<i class="va">a</i> − 120 → <i class="va">a</i> = 160<br>'+
+        'Prizes: 160, 140, 120, 100, 80, 60, 40</div></div>'+
+        '<div class="say">Aakhir me saare prizes likhna. Sirf <i class="va">a</i> likhoge toh poore marks nahi milenge.</div>'
+      ]},
+
+    { id:'s6', title:'Case study kaise banate hain', checks:['sumapply','sumn','sumsymb'], also:['casestudy'], lvl:2,
+      cards:[
+        '<span class="eyebrow">Section E</span><h2>Ek scenario, teen sawaal</h2>'+
+        '<p>Board paper me teen case studies aate hain, <strong>4-4 marks</strong> ke. Har ek me ek kahani hoti hai aur uspe teen sawaal:</p>'+
+        '<ul>'+
+        '<li><strong>(i)</strong> 1 mark — AP hai ya nahi, ya <i class="va">a</i> aur <i class="vd">d</i> kya hai</li>'+
+        '<li><strong>(ii)</strong> 1 mark — koi ek term (a<sub>n</sub>)</li>'+
+        '<li><strong>(iii)</strong> 2 marks — sum, ya koi ulta sawaal. Isme OR ka choice hota hai</li>'+
+        '</ul>'+
+        '<div class="say">Pehle do parts lagbhag free ke hote hain. Wo mat chhodna.</div>',
+
+        '<span class="eyebrow">Asli paper se</span><h2>Multistorey building</h2>'+
+        '<p><em>Ground floor se first floor tak 10 stairs, first se second 24, second se third 38, aur aise hi.</em></p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<b>(i)</b> 10, 24, 38 AP hai? → gaps 14, 14 → haan, <i class="vd">d</i> = 14<br>'+
+        '<b>(ii)</b> 11th floor tak kul stairs → <i class="vs">S</i><sub>11</sub> = 11/2[20 + 140] = 880<br>'+
+        '<b>(iii)</b> 6th floor tak aana-jaana → 2 × <i class="vs">S</i>₆ = 2 × 270 = 540</div></div>'+
+        '<p>Dekha? (ii) me sum, (iii) me sum ka double. Ek hi kahani, teen alag formule.</p>',
+
+        '<span class="eyebrow">Asli paper se</span><h2>Foldable ladder</h2>'+
+        '<p><em>10 steps. Foldi hui halat me steps ke beech 6 cm, khuli halat me 30 cm. Pehla step zameen se 40 cm upar.</em></p>'+
+        '<div class="box"><div class="cap" style="text-align:left;font-size:14px;line-height:1.8">'+
+        '<b>(i)</b> Position I ka AP → 40, 46, 52, 58, …<br>'+
+        '<b>(ii)</b> Position II ka AP → 40, 70, 100, 130, …<br>'+
+        '<b>(iii)</b> Position II ki poori height → a₁₀ = 40 + 9(30) = 310 cm</div></div>'+
+        '<p>Yahan sum nahi laga — height poochhi thi, toh a<sub>n</sub>. Har case study me sum nahi hota.</p>'+
+        '<div class="say">Har part ko alag question maano. Kahani ek hai, formula alag alag.</div>',
+
+        '<span class="eyebrow">Likhne ka tarika</span><h2>Chhote steps, poore marks</h2>'+
+        '<ul>'+
+        '<li>Har part ka number likho — (i), (ii), (iii)</li>'+
+        '<li>Given AP pehle likho, phir <i class="va">a</i> aur <i class="vd">d</i></li>'+
+        '<li>Formula box karke likho, phir value daalo</li>'+
+        '<li>Answer sentence me — "hence there are 880 stairs"</li>'+
+        '</ul>'+
+        '<div class="say">(iii) me OR hota hai — dono padho, jo aasan lage wo banao. Dono banane ki zarurat nahi.</div>'
+      ]}
+  ],
+
   word:[
 
     { id:'w2', title:'English se equation banao', checks:['translate','translate','translate'], lvl:1,
@@ -410,6 +644,7 @@ const LESSONS={
 };
 
 /* the sum formula was promised for the next class — say so, don't half-teach it */
+/* kept for the record — the sum is now taught, so nothing is locked */
 const NEXT_UP={
   title:'Sum of n terms',
   ex:'Exercise 5.3',
@@ -423,5 +658,7 @@ const PARTS={
   formula:{ name:'a + (n − 1)d', kicker:'Part 02 · Exercise 5.2',
     blurb:'Koi bhi term, koi bhi position, table, missing boxes, middle term.' },
   word:{ name:'Exam sawaal', kicker:'Part 03 · Exercise 5.2',
-    blurb:'Do term diye hain, kitne numbers hain, word problems. Marks yahin se aate hain.' }
+    blurb:'Do term diye hain, kitne numbers hain, word problems. Marks yahin se aate hain.' },
+  sum:{ name:'Sum (S\u2099)', kicker:'Part 04 · Exercise 5.3',
+    blurb:'Saare terms milakar kitna. Gauss wala trick, table, aur sum ke word problems.' }
 };
